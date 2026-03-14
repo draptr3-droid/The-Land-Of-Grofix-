@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AETHERMOOR — Realms of Fate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loading-content">
+    <div class="loading-rune">⬡</div>
+    <h1 class="loading-title">AETHERMOOR</h1>
+    <p class="loading-sub">Realms of Fate</p>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+    <p class="loading-status" id="loading-status">Weaving the fates...</p>
+  </div>
+</div>
+
+<!-- MAIN MENU -->
+<div id="main-menu" class="screen hidden">
+  <div class="menu-bg">
+    <canvas id="particle-canvas"></canvas>
+    <div class="menu-overlay"></div>
+  </div>
+  <div class="menu-content">
+    <div class="menu-logo">
+      <div class="logo-rune">⬡</div>
+      <h1>AETHERMOOR</h1>
+      <p class="logo-sub">Realms of Fate</p>
+    </div>
+    <nav class="main-nav">
+      <button class="menu-btn primary" onclick="Game.startNewGame()">⚔ New Adventure</button>
+      <button class="menu-btn" onclick="Game.loadGame()">📜 Continue Journey</button>
+      <button class="menu-btn" onclick="UI.showScreen('lore-screen')">🌍 The World</button>
+      <button class="menu-btn" onclick="UI.showScreen('credits-screen')">✦ Credits</button>
+    </nav>
+    <div class="menu-footer">
+      <span>v1.0 — A living world of infinite stories</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHARACTER CREATION -->
+<div id="char-creation" class="screen hidden">
+  <div class="creation-bg"></div>
+  <div class="creation-container">
+    <div class="creation-header">
+      <h2>Forge Your Legend</h2>
+      <p>Every choice echoes through eternity</p>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="creation-steps">
+      <div class="step active" data-step="1"><span>1</span>Race</div>
+      <div class="step" data-step="2"><span>2</span>Class</div>
+      <div class="step" data-step="3"><span>3</span>Origin</div>
+      <div class="step" data-step="4"><span>4</span>Attributes</div>
+      <div class="step" data-step="5"><span>5</span>Appearance</div>
+      <div class="step" data-step="6"><span>6</span>Destiny</div>
+    </div>
+
+    <!-- Step 1: Race -->
+    <div class="creation-step" id="step-race">
+      <h3>Choose Your Race</h3>
+      <p class="step-desc">Your blood shapes your destiny before your first breath.</p>
+      <div class="race-grid" id="race-grid"></div>
+      <div class="race-detail" id="race-detail"></div>
+    </div>
+
+    <!-- Step 2: Class -->
+    <div class="creation-step hidden" id="step-class">
+      <h3>Choose Your Path</h3>
+      <p class="step-desc">The road you walk will define the legend you leave behind.</p>
+      <div class="class-grid" id="class-grid"></div>
+      <div class="class-detail" id="class-detail"></div>
+    </div>
+
+    <!-- Step 3: Origin -->
+    <div class="creation-step hidden" id="step-origin">
+      <h3>Your Origin Story</h3>
+      <p class="step-desc">Where you came from shapes where you can go.</p>
+      <div class="origin-grid" id="origin-grid"></div>
+    </div>
+
+    <!-- Step 4: Attributes -->
+    <div class="creation-step hidden" id="step-attributes">
+      <h3>Shape Your Soul</h3>
+      <p class="step-desc">Distribute <span id="points-remaining" class="highlight">27</span> points among your core attributes.</p>
+      <div class="attributes-panel" id="attributes-panel"></div>
+      <div class="attr-preview" id="attr-preview"></div>
+    </div>
+
+    <!-- Step 5: Appearance -->
+    <div class="creation-step hidden" id="step-appearance">
+      <h3>Your Visage</h3>
+      <p class="step-desc">The face the world will remember — or fear.</p>
+      <div class="appearance-panel">
+        <div class="character-portrait" id="char-portrait">
+          <div class="portrait-figure" id="portrait-figure"></div>
+          <div class="portrait-aura" id="portrait-aura"></div>
+        </div>
+        <div class="appearance-options" id="appearance-options"></div>
+      </div>
+      <div class="name-input-wrap">
+        <label>Your Name</label>
+        <input type="text" id="char-name" placeholder="Enter your name..." maxlength="24" class="name-input">
+        <button class="btn-small" onclick="CharCreation.randomName()">⚄ Random</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Destiny -->
+    <div class="creation-step hidden" id="step-destiny">
+      <h3>Your Fate is Written</h3>
+      <p class="step-desc">The stars have spoken. Your path begins now.</p>
+      <div class="destiny-summary" id="destiny-summary"></div>
+      <div class="destiny-prophecy" id="destiny-prophecy"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="creation-nav">
+      <button class="btn secondary" id="btn-back" onclick="CharCreation.prevStep()" disabled>← Back</button>
+      <button class="btn primary" id="btn-next" onclick="CharCreation.nextStep()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN GAME -->
+<div id="game-screen" class="screen hidden">
+  <!-- Top HUD -->
+  <div id="top-hud">
+    <div class="hud-left">
+      <div class="portrait-mini" id="hud-portrait"></div>
+      <div class="hud-vitals">
+        <div class="vital-row">
+          <span class="vital-label">HP</span>
+          <div class="vital-bar hp-bar"><div class="vital-fill" id="hp-fill"></div></div>
+          <span class="vital-num" id="hp-num">100/100</span>
+        </div>
+        <div class="vital-row">
+          <span class="vital-label">MP</span>
+          <div class="vital-bar mp-bar"><div class="vital-fill" id="mp-fill"></div></div>
+          <span class="vital-num" id="mp-num">50/50</span>
+        </div>
+        <div class="vital-row">
+          <span class="vital-label">XP</span>
+          <div class="vital-bar xp-bar"><div class="vital-fill" id="xp-fill"></div></div>
+          <span class="vital-num" id="xp-num">0/100</span>
+        </div>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div class="location-display">
+        <span class="location-icon">◈</span>
+        <span id="location-name">The Verdant Crossroads</span>
+      </div>
+      <div class="story-arc-display">
+        <span id="story-arc">Chapter I: A World on the Brink</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-stats">
+        <span class="hud-stat">⚔ <span id="hud-atk">12</span></span>
+        <span class="hud-stat">🛡 <span id="hud-def">8</span></span>
+        <span class="hud-stat">✦ Lv.<span id="hud-level">1</span></span>
+        <span class="hud-stat">◈ <span id="hud-gold">50</span>g</span>
+      </div>
+      <div class="hud-buttons">
+        <button class="hud-btn" onclick="UI.openPanel('inventory')" title="Inventory">⚙</button>
+        <button class="hud-btn" onclick="UI.openPanel('skilltree')" title="Skill Tree">⬡</button>
+        <button class="hud-btn" onclick="UI.openPanel('journal')" title="Journal">📜</button>
+        <button class="hud-btn" onclick="UI.openPanel('map')" title="Map">◈</button>
+        <button class="hud-btn" onclick="UI.openPanel('character')" title="Character">⚔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main game area -->
+  <div id="game-main">
+    <!-- Scene panel -->
+    <div id="scene-panel">
+      <div id="scene-bg" class="scene-bg"></div>
+      <div id="scene-overlay"></div>
+      <div id="scene-content">
+        <div id="scene-title" class="scene-title"></div>
+        <div id="scene-art" class="scene-art"></div>
+        <div id="scene-text" class="scene-text"></div>
+        <div id="active-buffs" class="active-buffs"></div>
+      </div>
+    </div>
+
+    <!-- Action panel -->
+    <div id="action-panel">
+      <div class="action-header">
+        <span id="action-context">What will you do?</span>
+      </div>
+      <div id="action-choices" class="action-choices"></div>
+      <div id="dice-area" class="dice-area hidden">
+        <div class="dice-container" id="dice-container"></div>
+        <p id="dice-result" class="dice-result"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Effects Bar -->
+  <div id="status-bar">
+    <div id="status-effects"></div>
+    <div id="active-quests-mini"></div>
+  </div>
+</div>
+
+<!-- PANELS (overlays) -->
+
+<!-- Inventory Panel -->
+<div id="panel-inventory" class="panel hidden">
+  <div class="panel-header">
+    <h3>⚙ Inventory</h3>
+    <div class="panel-tabs">
+      <button class="ptab active" onclick="Inventory.showTab('all')">All</button>
+      <button class="ptab" onclick="Inventory.showTab('weapons')">Weapons</button>
+      <button class="ptab" onclick="Inventory.showTab('armor')">Armor</button>
+      <button class="ptab" onclick="Inventory.showTab('consumables')">Consumables</button>
+      <button class="ptab" onclick="Inventory.showTab('quest')">Quest</button>
+    </div>
+    <button class="close-panel" onclick="UI.closePanel('inventory')">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="inventory-grid" id="inventory-grid"></div>
+    <div class="item-detail" id="item-detail">
+      <p class="item-detail-placeholder">Select an item to inspect</p>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <span id="carry-weight">Weight: 0/50</span>
+    <span id="gold-display">◈ 50 Gold</span>
+  </div>
+</div>
+
+<!-- Skill Tree Panel -->
+<div id="panel-skilltree" class="panel hidden">
+  <div class="panel-header">
+    <h3>⬡ Skill Tree</h3>
+    <div class="panel-tabs" id="skill-tabs"></div>
+    <button class="close-panel" onclick="UI.closePanel('skilltree')">✕</button>
+  </div>
+  <div class="panel-body skilltree-body">
+    <div class="skill-points-display">
+      <span>Available Points: </span><span id="skill-points-avail" class="highlight">0</span>
+    </div>
+    <div id="skill-tree-container" class="skill-tree-container"></div>
+    <div id="skill-detail" class="skill-detail">
+      <p class="skill-detail-placeholder">Hover a skill to inspect</p>
+    </div>
+  </div>
+</div>
+
+<!-- Journal Panel -->
+<div id="panel-journal" class="panel hidden">
+  <div class="panel-header">
+    <h3>📜 Chronicle</h3>
+    <div class="panel-tabs">
+      <button class="ptab active" onclick="Journal.showTab('quests')">Quests</button>
+      <button class="ptab" onclick="Journal.showTab('lore')">Lore</button>
+      <button class="ptab" onclick="Journal.showTab('choices')">Your Choices</button>
+      <button class="ptab" onclick="Journal.showTab('factions')">Factions</button>
+    </div>
+    <button class="close-panel" onclick="UI.closePanel('journal')">✕</button>
+  </div>
+  <div class="panel-body">
+    <div id="journal-list" class="journal-list"></div>
+    <div id="journal-detail" class="journal-detail"></div>
+  </div>
+</div>
+
+<!-- Map Panel -->
+<div id="panel-map" class="panel hidden">
+  <div class="panel-header">
+    <h3>◈ World Map</h3>
+    <button class="close-panel" onclick="UI.closePanel('map')">✕</button>
+  </div>
+  <div class="panel-body map-body">
+    <canvas id="map-canvas" width="800" height="500"></canvas>
+    <div id="map-legend" class="map-legend"></div>
+    <div id="map-location-info" class="map-location-info"></div>
+  </div>
+</div>
+
+<!-- Character Panel -->
+<div id="panel-character" class="panel hidden">
+  <div class="panel-header">
+    <h3>⚔ Character Sheet</h3>
+    <button class="close-panel" onclick="UI.closePanel('character')">✕</button>
+  </div>
+  <div class="panel-body char-panel-body">
+    <div class="char-left">
+      <div class="char-portrait-large" id="char-portrait-large"></div>
+      <div class="char-basic-info" id="char-basic-info"></div>
+      <div class="char-equipment" id="char-equipment"></div>
+    </div>
+    <div class="char-right">
+      <div class="char-stats-full" id="char-stats-full"></div>
+      <div class="char-traits" id="char-traits"></div>
+      <div class="char-buffs-debuffs" id="char-buffs-debuffs"></div>
+      <div class="char-reputation" id="char-reputation"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Combat Overlay -->
+<div id="combat-overlay" class="hidden">
+  <div id="combat-scene">
+    <div id="combat-bg" class="combat-bg"></div>
+    <div id="combatants">
+      <div class="combatant player-side" id="player-combatant">
+        <div class="combatant-art" id="player-combat-art"></div>
+        <div class="combatant-info">
+          <span id="player-combat-name">Hero</span>
+          <div class="combat-bar hp"><div class="combat-fill" id="player-hp-bar"></div></div>
+          <div class="combat-bar mp"><div class="combat-fill" id="player-mp-bar"></div></div>
+        </div>
+        <div class="combatant-effects" id="player-effects"></div>
+      </div>
+      <div class="combat-center">
+        <div class="vs-orb">VS</div>
+        <div id="combat-log" class="combat-log"></div>
+      </div>
+      <div class="combatant enemy-side" id="enemy-combatant">
+        <div class="combatant-art" id="enemy-combat-art"></div>
+        <div class="combatant-info">
+          <span id="enemy-combat-name">Enemy</span>
+          <div class="combat-bar hp"><div class="combat-fill" id="enemy-hp-bar"></div></div>
+          <div class="combat-bar mp"><div class="combat-fill" id="enemy-mp-bar"></div></div>
+        </div>
+        <div class="combatant-effects" id="enemy-effects"></div>
+      </div>
+    </div>
+    <div id="combat-actions" class="combat-actions">
+      <div class="combat-action-tabs">
+        <button class="ctab active" onclick="Combat.showTab('attack')">⚔ Attack</button>
+        <button class="ctab" onclick="Combat.showTab('skills')">⬡ Skills</button>
+        <button class="ctab" onclick="Combat.showTab('items')">⚙ Items</button>
+        <button class="ctab" onclick="Combat.showTab('flee')">💨 Flee</button>
+      </div>
+      <div id="combat-action-content" class="combat-action-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification System -->
+<div id="notifications" class="notifications"></div>
+
+<!-- Lore Screen -->
+<div id="lore-screen" class="screen hidden">
+  <button class="back-btn" onclick="UI.showScreen('main-menu')">← Back</button>
+  <div class="lore-content">
+    <h2>The World of Aethermoor</h2>
+    <div class="lore-text">
+      <p>In an age before memory, the god-smith Vaelthar shattered the Primordial Crystal, scattering divine essence across the mortal realm. These shards — called <em>Aetherstones</em> — became the foundation of all magic, all conflict, and all destiny.</p>
+      <p>Five great civilizations rose to prominence: the iron-willed <strong>Drakthari Empire</strong>, the mystical <strong>Sylvani Accord</strong>, the subterranean <strong>Stoneheart Compact</strong>, the seafaring <strong>Tidecrown Kingdoms</strong>, and the wandering <strong>Ashborn Confederacy</strong>.</p>
+      <p>Now, a shadow stirs in the east. The <em>Veilbreaker Cult</em> seeks to reunite the shards and unmake creation itself. Alliances fracture. Heroes rise — and fall. The fate of Aethermoor rests not on prophecy, but on choice.</p>
+      <p><em>Your</em> choices.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Credits -->
+<div id="credits-screen" class="screen hidden">
+  <button class="back-btn" onclick="UI.showScreen('main-menu')">← Back</button>
+  <div class="credits-content">
+    <h2>Aethermoor</h2>
+    <p>A handcrafted RPG experience</p>
+    <p>Built with pure HTML, CSS & JavaScript</p>
+    <p>Ready for GitHub → Vercel + Render deployment</p>
+    <p class="credits-small">All systems: Story Engine • Skill Trees • Combat • Inventory • Factions • Buffs • Races • Classes • Dynamic World</p>
+  </div>
+</div>
+
+<!-- Tooltip -->
+<div id="tooltip" class="tooltip hidden"></div>
+
+<!-- Level Up Modal -->
+<div id="levelup-modal" class="modal hidden">
+  <div class="modal-content levelup-content">
+    <div class="levelup-burst" id="levelup-burst"></div>
+    <h2 class="levelup-title">LEVEL UP!</h2>
+    <p id="levelup-level" class="levelup-level">You are now Level 2</p>
+    <div id="levelup-bonuses" class="levelup-bonuses"></div>
+    <button class="btn primary" onclick="UI.closeLevelUp()">Continue ⚔</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/creation.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/story.js"></script>
+<script src="js/map.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
