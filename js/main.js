@@ -18,7 +18,7 @@ const Game = {
       return 'http://localhost:3001';
     }
     // Replace this with your actual Render URL after deployment
-    return 'https://the-land-of-grofix.onrender.com';
+    return 'https://the-land-of-grofix-1.onrender.com';
   })(),
 
   // ---- INIT ----
