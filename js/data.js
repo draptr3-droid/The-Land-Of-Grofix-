@@ -1,4 +1,3 @@
-
 // =====================================================
 // AETHERMOOR — Complete Game Data
 // Races, Classes, Skills, Items, Story, Buffs, etc.
@@ -42,7 +41,7 @@ const DATA = {
     dwarf: {
       id: 'dwarf', name: 'Ironborn Dwarf', icon: '⛏', tagline: 'Forged in stone, tempered by flame',
       description: 'Dwarves are the children of the deep earth, born with stone in their bones and fire in their hearts. Their resilience is legendary — their stubbornness even more so.',
-      lore: 'The god-smith Vaelthar carved the first dwarves from a mountain\\'s heart and breathed forge-fire into them.',
+      lore: 'The god-smith Vaelthar carved the first dwarves from a mountain’s heart and breathed forge-fire into them.',
       stats: { str: 2, dex: -1, con: 3, int: 1, wis: 1, cha: 0 },
       bonusSkillPoints: 0,
       traits: ['Stonecunning', 'Poison Resistance', 'Combat Training'],
@@ -56,7 +55,7 @@ const DATA = {
     },
     tiefling: {
       id: 'tiefling', name: 'Tiefling', icon: '😈', tagline: 'Hellfire in their veins, starlight in their hearts',
-      description: 'Born with infernal heritage, tieflings carry the weight of their ancestors\\' pacts. Mistrusted by many, their dark gifts can serve light or shadow equally.',
+      description: 'Born with infernal heritage, tieflings carry the weight of their ancestors’ pacts. Mistrusted by many, their dark gifts can serve light or shadow equally.',
       lore: 'When the demon-lord Xareth was slain, his essence scattered across the mortal realm, leaving a dark mark on bloodlines for generations.',
       stats: { str: 1, dex: 1, con: 0, int: 2, wis: 0, cha: 2 },
       bonusSkillPoints: 0,
@@ -90,7 +89,7 @@ const DATA = {
       lore: 'The tinker-god Zibbet breathed life into clay and gears, and from that union came the gnomes — curious, inventive, and unbound by convention.',
       stats: { str: -2, dex: 2, con: 0, int: 3, wis: 1, cha: 1 },
       bonusSkillPoints: 1,
-      traits: ['Artificer\'s Eye', 'Gnomish Cunning', 'Tinker'],
+      traits: ['Artificer\’s Eye', 'Gnomish Cunning', 'Tinker'],
       passives: [
         { id: 'gnomish_cunning', name: 'Gnomish Cunning', desc: 'Advantage on all INT saves; craft speed doubled', icon: '⚙' },
         { id: 'illusion_affinity', name: 'Illusion Weave', desc: 'Illusion spells cost 40% less MP; last 50% longer', icon: '🌀' },
@@ -100,7 +99,7 @@ const DATA = {
       physique: { skinTones: ['Rose','Honey','Copper','Tawny','Cream'], hairColors: ['Brown','Russet','Orange','White','Teal'], eyeColors: ['Hazel','Copper','Teal','Amber','Bright Blue'], bodyTypes: ['Tiny','Compact','Wiry','Nimble'] }
     },
     dragonborn: {
-      id: 'dragonborn', name: 'Dragonborn', icon: '🐉', tagline: 'Dragon\'s blood flows eternal',
+      id: 'dragonborn', name: 'Dragonborn', icon: '🐉', tagline: 'Dragon\’s blood flows eternal',
       description: 'Dragonborn carry the legacy of ancient wyrms. Their draconic ancestry grants breath weapons, scales of hardened flesh, and a pride that borders on divinity.',
       lore: 'When the great Dragon Aeltharax chose to walk as mortal, some of his children inherited his form — and his fire.',
       stats: { str: 2, dex: 0, con: 1, int: 1, wis: 0, cha: 2 },
@@ -130,7 +129,7 @@ const DATA = {
       physique: { skinTones: ['Void Black','Deep Grey','Ash','Shadow Blue','Eclipse'], hairColors: ['Black','Shadow White','Void','Dark Violet','Silver-black'], eyeColors: ['Void White','Shadow Grey','Black','Pale Gold','Ghost Blue'], bodyTypes: ['Wispy','Slender','Spectral','Shifting'] }
     },
     celestial: {
-      id: 'celestial', name: 'Aasimar', icon: '😇', tagline: 'Heaven\'s light made mortal',
+      id: 'celestial', name: 'Aasimar', icon: '😇', tagline: 'Heaven\’s light made mortal',
       description: 'Blessed by divine lineage, Aasimar carry celestial power within them. Radiant and commanding, they are born leaders and healers — or fallen angels twisted by darkness.',
       lore: 'The god Lumenos occasionally grants divine essence to mortals. Their descendants carry this light for generations.',
       stats: { str: 0, dex: 0, con: 1, int: 1, wis: 3, cha: 3 },
@@ -210,7 +209,7 @@ const DATA = {
       startingItems: ['holy_mace', 'plate_armor', 'holy_shield', 'healing_herbs'],
       skillTrees: ['holy', 'protection', 'oaths'],
       abilities: ['Smite', 'Lay on Hands', 'Divine Shield'],
-      lore: 'Sworn before the gods, a Crusader\'s oath determines their power — and breaking it costs them everything.',
+      lore: 'Sworn before the gods, a Crusader\’s oath determines their power — and breaking it costs them everything.',
       playstyle: 'Hybrid tank-healer. Smite for burst. Protect allies. Oath system changes abilities.'
     },
     ranger: {
@@ -221,7 +220,7 @@ const DATA = {
       startingStats: { hp: 100, mp: 60, attack: 16, defense: 8, speed: 12 },
       startingItems: ['hunters_bow', 'studded_leather', 'quiver', 'wolf_whistle'],
       skillTrees: ['archery', 'beast_mastery', 'survival'],
-      abilities: ['Precise Shot', 'Call Beast', 'Hunter\'s Mark'],
+      abilities: ['Precise Shot', 'Call Beast', 'Hunter\’s Mark'],
       lore: 'Trained in the wild edges of civilization, Pathfinders are scouts, hunters, and protectors of the borderlands.',
       playstyle: 'Ranged DPS with companion. Mark targets for bonus damage. Excellent at kiting.'
     },
@@ -317,12 +316,12 @@ const DATA = {
   origins: [
     { id: 'noble', name: 'Fallen Noble', icon: '👑', desc: 'Once wealthy and powerful, now stripped of everything. You know courts, politics, and how to lie beautifully.', bonus: '+2 CHA, +1 INT, Courtly Manners skill', stats: { cha: 2, int: 1 }, startGold: 150, skills: ['courtly_manners', 'heraldry'] },
     { id: 'soldier', name: 'Veteran Soldier', icon: '⚔', desc: 'Years of war have hardened you. You know battle formations, weapon maintenance, and when to retreat.', bonus: '+2 STR, +1 CON, Tactics skill', stats: { str: 2, con: 1 }, startGold: 60, skills: ['tactics', 'first_aid'] },
-    { id: 'scholar', name: 'Rogue Scholar', icon: '📚', desc: 'Expelled from the Academy for asking the wrong questions. You have knowledge they didn\'t want you to have.', bonus: '+2 INT, +1 WIS, Forbidden Lore skill', stats: { int: 2, wis: 1 }, startGold: 40, skills: ['forbidden_lore', 'arcane_theory'] },
+    { id: 'scholar', name: 'Rogue Scholar', icon: '📚', desc: 'Expelled from the Academy for asking the wrong questions. You have knowledge they didn\’t want you to have.', bonus: '+2 INT, +1 WIS, Forbidden Lore skill', stats: { int: 2, wis: 1 }, startGold: 40, skills: ['forbidden_lore', 'arcane_theory'] },
     { id: 'criminal', name: 'Criminal', icon: '🗡', desc: 'The law never understood you. Or maybe it understood too well. Either way, you know how the underworld works.', bonus: '+2 DEX, +1 CHA, Criminal Contacts skill', stats: { dex: 2, cha: 1 }, startGold: 80, skills: ['criminal_contacts', 'sleight_of_hand'] },
     { id: 'hermit', name: 'Hermit Sage', icon: '🌿', desc: 'Years of isolation granted you communion with nature and insight no academy can teach.', bonus: '+2 WIS, +1 CON, Nature Lore skill', stats: { wis: 2, con: 1 }, startGold: 20, skills: ['nature_lore', 'meditation'] },
     { id: 'outlander', name: 'Tribal Outlander', icon: '🏕', desc: 'From the untamed edges of civilization, where every day is survival. You know things city folk never will.', bonus: '+2 CON, +1 STR, Survival skill', stats: { con: 2, str: 1 }, startGold: 30, skills: ['survival', 'tracking'] },
     { id: 'acolyte', name: 'Fallen Acolyte', icon: '⛪', desc: 'You served the gods faithfully. Then you saw behind the curtain. Your faith is complicated now, but your training remains.', bonus: '+2 WIS, +1 CHA, Divine Knowledge skill', stats: { wis: 2, cha: 1 }, startGold: 50, skills: ['divine_knowledge', 'ritual_magic'] },
-    { id: 'sailor', name: 'Cursed Sailor', icon: '⚓', desc: 'The sea gave and the sea took. You\'ve seen things in the deep that most people can\'t imagine — and some you\'d rather forget.', bonus: '+2 DEX, +1 WIS, Sea Lore skill', stats: { dex: 2, wis: 1 }, startGold: 70, skills: ['sea_lore', 'navigation'] }
+    { id: 'sailor', name: 'Cursed Sailor', icon: '⚓', desc: 'The sea gave and the sea took. You\’ve seen things in the deep that most people can\’t imagine — and some you\’d rather forget.', bonus: '+2 DEX, +1 WIS, Sea Lore skill', stats: { dex: 2, wis: 1 }, startGold: 70, skills: ['sea_lore', 'navigation'] }
   ],
 
   // ===================================================
@@ -362,7 +361,7 @@ const DATA = {
         { id: 'fire_bolt', name: 'Fire Bolt', icon: '🔥', x: 50, y: 50, desc: 'Hurl a bolt of searing flame.', effects: ['1d6+INT fire damage', 'Costs 5 MP'], cost: 1, requires: [], maxRank: 5 },
         { id: 'burning', name: 'Burning', icon: '🌡', x: 180, y: 50, desc: 'Your flames linger.', effects: ['Targets burn for 3 turns'], cost: 1, requires: ['fire_bolt'], maxRank: 3 },
         { id: 'fireball', name: 'Fireball', icon: '💥', x: 50, y: 160, desc: 'Explosive area attack.', effects: ['3d8+INT AoE fire damage', 'Costs 20 MP'], cost: 2, requires: ['fire_bolt'], maxRank: 3 },
-        { id: 'fire_mastery', name: 'Pyromancer\'s Mastery', icon: '🌋', x: 180, y: 160, desc: 'Fire magic becomes second nature.', effects: ['+30% fire damage', 'Fire spell MP cost -25%'], cost: 2, requires: ['burning', 'fireball'], maxRank: 3 },
+        { id: 'fire_mastery', name: 'Pyromancer\’s Mastery', icon: '🌋', x: 180, y: 160, desc: 'Fire magic becomes second nature.', effects: ['+30% fire damage', 'Fire spell MP cost -25%'], cost: 2, requires: ['burning', 'fireball'], maxRank: 3 },
         { id: 'meteor', name: 'Meteor Strike', icon: '☄', x: 310, y: 120, desc: 'Call a meteor from the sky.', effects: ['Massive AoE, 10d10 fire', 'Costs 60 MP'], cost: 3, requires: ['fireball'], maxRank: 2 },
         { id: 'phoenix_form', name: 'Phoenix Form', icon: '🦅', x: 50, y: 280, desc: 'Become the Phoenix.', effects: ['Fly', 'All spells become fire', 'Revive on death (1x)'], cost: 4, requires: ['fire_mastery'], maxRank: 1 },
         { id: 'inferno', name: 'Inferno', icon: '🌊', x: 310, y: 280, desc: 'The world burns.', effects: ['Sustained fire AoE each turn for 5 turns'], cost: 4, requires: ['meteor', 'fire_mastery'], maxRank: 2 },
@@ -417,13 +416,13 @@ const DATA = {
     iron_sword: { id: 'iron_sword', name: 'Iron Sword', icon: '⚔', type: 'weapon', rarity: 'common', slot: 'mainhand', attack: 8, desc: 'A serviceable blade, reliable if unexceptional.', value: 40, weight: 3 },
     twin_daggers: { id: 'twin_daggers', name: 'Shadow Daggers', icon: '🗡', type: 'weapon', rarity: 'common', slot: 'mainhand', attack: 6, speedBonus: 4, critBonus: 10, desc: 'Fast and deadly in the right hands.', value: 60, weight: 2 },
     apprentice_staff: { id: 'apprentice_staff', name: 'Apprentice Staff', icon: '🪄', type: 'weapon', rarity: 'common', slot: 'mainhand', attack: 4, spellBonus: 15, mpBonus: 20, desc: 'Carved from aetherthorn, it hums with stored magic.', value: 80, weight: 2 },
-    hunters_bow: { id: 'hunters_bow', name: 'Hunter\'s Longbow', icon: '🏹', type: 'weapon', rarity: 'common', slot: 'mainhand', attack: 10, rangeBonus: true, desc: 'Compact and powerful. Favored by border rangers.', value: 55, weight: 2 },
+    hunters_bow: { id: 'hunters_bow', name: 'Hunter\’s Longbow', icon: '🏹', type: 'weapon', rarity: 'common', slot: 'mainhand', attack: 10, rangeBonus: true, desc: 'Compact and powerful. Favored by border rangers.', value: 55, weight: 2 },
     holy_mace: { id: 'holy_mace', name: 'Blessed Mace', icon: '🔨', type: 'weapon', rarity: 'uncommon', slot: 'mainhand', attack: 9, holyBonus: 5, desc: 'Sanctified in the Temple of Lumenos. Undead tremble.', value: 100, weight: 4 },
     bone_wand: { id: 'bone_wand', name: 'Bone Wand', icon: '🦴', type: 'weapon', rarity: 'uncommon', slot: 'mainhand', attack: 3, necroBonus: 20, mpBonus: 30, desc: 'Cut from the skeleton of a lich. Deeply unsettling.', value: 120, weight: 1 },
     // Armors
     chainmail: { id: 'chainmail', name: 'Chainmail', icon: '🛡', type: 'armor', rarity: 'common', slot: 'chest', defense: 12, desc: 'Interlocking iron rings. Heavy but proven.', value: 80, weight: 8 },
     leather_armor: { id: 'leather_armor', name: 'Supple Leather', icon: '🥋', type: 'armor', rarity: 'common', slot: 'chest', defense: 6, speedBonus: 2, desc: 'Treated leather that moves with you.', value: 50, weight: 4 },
-    scholar_robes: { id: 'scholar_robes', name: 'Scholar\'s Robes', icon: '👘', type: 'armor', rarity: 'common', slot: 'chest', defense: 2, spellBonus: 10, mpBonus: 40, desc: 'Woven with aetheric thread. Offers little physical protection.', value: 90, weight: 1 },
+    scholar_robes: { id: 'scholar_robes', name: 'Scholar\’s Robes', icon: '👘', type: 'armor', rarity: 'common', slot: 'chest', defense: 2, spellBonus: 10, mpBonus: 40, desc: 'Woven with aetheric thread. Offers little physical protection.', value: 90, weight: 1 },
     plate_armor: { id: 'plate_armor', name: 'Holy Plate', icon: '⚔', type: 'armor', rarity: 'uncommon', slot: 'chest', defense: 18, desc: 'Full plate blessed by the crusader orders.', value: 250, weight: 14 },
     // Consumables
     health_potion: { id: 'health_potion', name: 'Health Potion', icon: '🧪', type: 'consumable', rarity: 'common', effect: 'heal', value_roll: '3d8+20', desc: 'Bright crimson. Tastes of copper and wildflower.', count: 2, shopValue: 50, weight: 0.5 },
@@ -448,7 +447,7 @@ const DATA = {
     invisible: { id: 'invisible', name: 'Invisible', icon: '👁', color: '#5a2d8a', duration: 3, effects: { untargetable: true }, desc: 'You are unseen, untouched.' },
     regenerating: { id: 'regenerating', name: 'Regenerating', icon: '💚', color: '#3dba78', duration: 5, effects: { hpRegenPerTurn: 15 }, desc: 'Wounds knit themselves shut.' },
     shielded: { id: 'shielded', name: 'Shield of Faith', icon: '🛡', color: '#2458a8', duration: 6, effects: { damageBlock: 20 }, desc: 'A divine barrier absorbs harm.' },
-    inspired: { id: 'inspired', name: 'Inspired', icon: '🎵', color: '#e07830', duration: 4, effects: { allMod: 1.15 }, desc: 'A bard\'s song fills you with purpose.' },
+    inspired: { id: 'inspired', name: 'Inspired', icon: '🎵', color: '#e07830', duration: 4, effects: { allMod: 1.15 }, desc: 'A bard\’s song fills you with purpose.' },
     berserking: { id: 'berserking', name: 'Berserker', icon: '😤', color: '#c0253a', duration: 5, effects: { attackMod: 1.8, defenseMod: 0.7 }, desc: 'Pure rage floods your veins.' },
     // Negative
     poisoned: { id: 'poisoned', name: 'Poisoned', icon: '☠', color: '#2d8a5a', duration: 4, effects: { hpDrainPerTurn: 8, speedMod: 0.85 }, desc: 'Venom courses through you.' },
@@ -457,7 +456,7 @@ const DATA = {
     stunned: { id: 'stunned', name: 'Stunned', icon: '⭐', color: '#888780', duration: 1, effects: { skipTurn: true }, desc: 'Stars fill your vision.' },
     feared: { id: 'feared', name: 'Feared', icon: '😨', color: '#8b1a2e', duration: 2, effects: { mustFlee: true }, desc: 'Primal terror takes hold.' },
     slowed: { id: 'slowed', name: 'Slowed', icon: '🐌', color: '#4a4560', duration: 3, effects: { speedMod: 0.5, attackSpeedMod: 0.7 }, desc: 'Your limbs feel like lead.' },
-    hexed: { id: 'hexed', name: 'Hexed', icon: '📿', color: '#7c3dba', duration: 5, effects: { damageTakenMod: 1.5 }, desc: 'A warlock\'s curse marks you for suffering.' }
+    hexed: { id: 'hexed', name: 'Hexed', icon: '📿', color: '#7c3dba', duration: 5, effects: { damageTakenMod: 1.5 }, desc: 'A warlock\’s curse marks you for suffering.' }
   },
 
   // ===================================================
@@ -471,7 +470,7 @@ const DATA = {
       text: 'Dawn breaks over the Verdant Crossroads — four roads meeting at the ancient Waystone of Aelthas. Your journey has led you here, to a moment that will ripple through history.\n\nSmoke rises on the eastern road. Three black-cloaked figures stand at the stone, chanting in a tongue that makes your teeth ache. They do not see you.\n\nNot yet.',
       choices: [
         { text: '⚔ Charge them immediately — they must be stopped', next: 'attack_cultists', type: 'combat', flag: 'aggressive_opener' },
-        { text: '👁 Watch from cover and learn what they\'re doing', next: 'observe_cultists', type: 'stealth', req: null },
+        { text: '👁 Watch from cover and learn what they\’re doing', next: 'observe_cultists', type: 'stealth', req: null },
         { text: '💬 Step forward and demand answers', next: 'confront_cultists', type: 'social', flag: 'diplomatic_opener' },
         { text: '🔮 Sense the magical emanations from the stone', next: 'detect_magic_waystone', type: 'magic', req: { stat: 'int', value: 12 } },
         { text: '🏃 Back away silently and seek information first', next: 'town_first', type: 'stealth', flag: 'cautious_opener' }
@@ -493,7 +492,7 @@ const DATA = {
     observe_cultists: {
       id: 'observe_cultists', title: 'In the Shadows',
       art: '👁', bg: 'misty-dawn',
-      text: 'From the brush you watch, barely breathing. The ritual is complex — a Waystone Awakening. They\'re trying to send a signal across the ley lines to something in the east. One cultist reads from a cracked tome. Another holds a glowing shard.\n\nAn Aetherstone shard.\n\nThe third keeps watch — and their eyes sweep dangerously close to your hiding spot.',
+      text: 'From the brush you watch, barely breathing. The ritual is complex — a Waystone Awakening. They\’re trying to send a signal across the ley lines to something in the east. One cultist reads from a cracked tome. Another holds a glowing shard.\n\nAn Aetherstone shard.\n\nThe third keeps watch — and their eyes sweep dangerously close to your hiding spot.',
       choices: [
         { text: '⚔ Rush them now — you have surprise on your side', next: 'ambush_cultists', type: 'combat', bonus: 'surprise_attack' },
         { text: '📖 Memorize the ritual — it could be useful', next: 'memorize_ritual', type: 'int', req: { stat: 'int', value: 10 } },
@@ -505,7 +504,7 @@ const DATA = {
     confront_cultists: {
       id: 'confront_cultists', title: 'Words at the Waystone',
       art: '💬', bg: 'tense-dawn',
-      text: '"Halt!" you call. They freeze. Then the leader — a woman with eyes like black mirrors — smiles.\n\n"Another soul for the Veilbreaker," she says. "How convenient. Will you join willingly? Your power would serve the Unmaking well."\n\nShe means it. There\'s no contempt in her voice — genuine invitation. That\'s more disturbing than threats.',
+      text: '"Halt!" you call. They freeze. Then the leader — a woman with eyes like black mirrors — smiles.\n\n"Another soul for the Veilbreaker," she says. "How convenient. Will you join willingly? Your power would serve the Unmaking well."\n\nShe means it. There\’s no contempt in her voice — genuine invitation. That\’s more disturbing than threats.',
       choices: [
         { text: '"Join you? Tell me why I should." — Probe for information', next: 'cultist_pitch', type: 'social', flag: 'heard_cult_offer' },
         { text: '"Never." — Refuse immediately', next: 'refused_cult', flag: 'rejected_cult' },
@@ -517,20 +516,20 @@ const DATA = {
     cultist_pitch: {
       id: 'cultist_pitch', title: 'The Unmaking',
       art: '🌑', bg: 'void-sky',
-      text: 'The cultist speaks for a long moment. The Veilbreaker Cult serves an entity older than gods — the Unweaving. It seeks to take the Primordial Crystal shards and restore chaos to a world it sees as an abomination of false order.\n\n"We don\'t want to destroy the world," she says. "We want to free it."\n\nSomething about her conviction is... compelling. Frighteningly so.',
+      text: 'The cultist speaks for a long moment. The Veilbreaker Cult serves an entity older than gods — the Unweaving. It seeks to take the Primordial Crystal shards and restore chaos to a world it sees as an abomination of false order.\n\n"We don\’t want to destroy the world," she says. "We want to free it."\n\nSomething about her conviction is... compelling. Frighteningly so.',
       storyFlags: ['learned_cult_doctrine'],
       choices: [
         { text: 'This is madness. Attack.', next: 'attack_cultists' },
-        { text: '"Free it? You\'d kill millions." — Push back on the philosophy', next: 'debate_unmaking', type: 'wis' },
+        { text: '"Free it? You\’d kill millions." — Push back on the philosophy', next: 'debate_unmaking', type: 'wis' },
         { text: '"Where are the shards?" — Focus on what matters', next: 'learn_shard_locations' },
-        { text: 'Express genuine interest — you\'ve always felt the world was wrong', next: 'dark_path_begin', type: 'cha', flag: 'dark_leanings', storyPath: 'shadow' }
+        { text: 'Express genuine interest — you\’ve always felt the world was wrong', next: 'dark_path_begin', type: 'cha', flag: 'dark_leanings', storyPath: 'shadow' }
       ]
     },
 
     fake_join_cult: {
       id: 'fake_join_cult', title: 'The Long Game',
       art: '😈', bg: 'shadow-hall',
-      text: 'You bow your head, expression carefully neutral. "I\'ve been looking for purpose. Perhaps this is it."\n\nThe leader\'s black eyes study you for a long moment. Then she smiles.\n\n"Sister Vael will accompany you to the Ashen Fortress. Prove your worth, and the Veilbreaker will reward you beyond imagining."\n\nYou\'re in. And completely surrounded by people who will kill you the moment they suspect the truth.',
+      text: 'You bow your head, expression carefully neutral. "I\’ve been looking for purpose. Perhaps this is it."\n\nThe leader\’s black eyes study you for a long moment. Then she smiles.\n\n"Sister Vael will accompany you to the Ashen Fortress. Prove your worth, and the Veilbreaker will reward you beyond imagining."\n\nYou\’re in. And completely surrounded by people who will kill you the moment they suspect the truth.',
       storyFlags: ['infiltrating_cult', 'dangerous_deception'],
       choices: [
         { text: 'Follow Sister Vael — go deep undercover', next: 'deep_cover', storyPath: 'infiltrator' },
@@ -554,7 +553,7 @@ const DATA = {
     town_first: {
       id: 'town_first', title: 'Ashwick Village',
       art: '🏘', bg: 'village-morning',
-      text: 'You find the village of Ashwick a mile down the western road. It\'s small, nervous. Three farmers bar the inn door when they see you coming.\n\nThe innkeeper — a stout woman named Morra — relaxes when she sees you\'re alone. She has a lot to say about the "black-robed strangers" and the missing villagers and the light that\'s been pulsing from the old Waystone at night.',
+      text: 'You find the village of Ashwick a mile down the western road. It\’s small, nervous. Three farmers bar the inn door when they see you coming.\n\nThe innkeeper — a stout woman named Morra — relaxes when she sees you\’re alone. She has a lot to say about the "black-robed strangers" and the missing villagers and the light that\’s been pulsing from the old Waystone at night.',
       choices: [
         { text: '💬 Ask Morra everything she knows about the cult', next: 'morra_intel' },
         { text: '🔭 Climb the church tower to scout the area', next: 'scout_area', type: 'dex' },
@@ -564,21 +563,21 @@ const DATA = {
     },
 
     morra_intel: {
-      id: 'morra_intel', title: 'Morra\'s Warning',
+      id: 'morra_intel', title: 'Morra\’s Warning',
       art: '🏘', bg: 'inn-interior',
-      text: '"Three nights back, the Waystone glowed black," Morra says, pouring you something strong. "Then Ser Aldric — our constable — just... left. Said he had \'new orders.\' And the Miller\'s daughter, gone the same night."\n\nShe lowers her voice. "There\'s a resistance. Survivors from the eastern towns who escaped the Cult. They meet in the old mill. But I\'d be careful — I think one of them might be a plant."',
+      text: '"Three nights back, the Waystone glowed black," Morra says, pouring you something strong. "Then Ser Aldric — our constable — just... left. Said he had \'new orders.\' And the Miller\’s daughter, gone the same night."\n\nShe lowers her voice. "There\’s a resistance. Survivors from the eastern towns who escaped the Cult. They meet in the old mill. But I\’d be careful — I think one of them might be a plant."',
       storyFlags: ['heard_about_resistance', 'morra_trusts_you'],
       choices: [
         { text: 'Go to the resistance meeting immediately', next: 'resistance_meeting', flag: 'joined_resistance' },
         { text: 'Investigate Ser Aldric — he might be key', next: 'find_aldric', storyPath: 'investigation' },
-        { text: 'Find the Miller\'s daughter first', next: 'rescue_quest', flag: 'good_path' }
+        { text: 'Find the Miller\’s daughter first', next: 'rescue_quest', flag: 'good_path' }
       ]
     },
 
     resistance_meeting: {
       id: 'resistance_meeting', title: 'The Resistance',
       art: '🕯', bg: 'mill-interior',
-      text: 'Seven people huddle in the mill by candlelight. A scarred soldier named Brenn leads them. A gnomish artificer. A scared young priest. A woman with a ranger\'s bearing and watchful eyes.\n\nAnd one person whose pupils, for just a moment, catch the light wrong.\n\nBrenn looks you over. "We don\'t take strangers lightly. Prove you\'re not a cult spy."',
+      text: 'Seven people huddle in the mill by candlelight. A scarred soldier named Brenn leads them. A gnomish artificer. A scared young priest. A woman with a ranger\’s bearing and watchful eyes.\n\nAnd one person whose pupils, for just a moment, catch the light wrong.\n\nBrenn looks you over. "We don\’t take strangers lightly. Prove you\’re not a cult spy."',
       choices: [
         { text: '"I killed two cultists at the Waystone." Show proof.', next: 'resistance_accepted', req: { flag: 'cultists_alerted' } },
         { text: '"Test me however you need to." Submit to scrutiny.', next: 'resistance_test' },
@@ -604,7 +603,7 @@ const DATA = {
     path_resistance: {
       id: 'path_resistance', title: 'The Long Fight',
       art: '🔥', bg: 'resistance-camp',
-      text: 'Commander Brenn clasps your arm. "You\'ve chosen the harder road — saving people who\'ll never know your name."\n\nThe Resistance operates out of the Sunken Barrows, a fortified ruin complex in the Ashwood. You\'re given a mission: infiltrate the Ashen Fortress and destroy the Waystone amplifier before the Veilbreaker Cult activates all six Waystones simultaneously.\n\nThe operation begins at dawn.',
+      text: 'Commander Brenn clasps your arm. "You\’ve chosen the harder road — saving people who\’ll never know your name."\n\nThe Resistance operates out of the Sunken Barrows, a fortified ruin complex in the Ashwood. You\’re given a mission: infiltrate the Ashen Fortress and destroy the Waystone amplifier before the Veilbreaker Cult activates all six Waystones simultaneously.\n\nThe operation begins at dawn.',
       storyFlags: ['resistance_member', 'act2_resistance'],
       choices: [
         { text: '⚔ Lead the assault — take the fight to them directly', next: 'resistance_assault', type: 'combat' },
@@ -617,7 +616,7 @@ const DATA = {
     path_empire: {
       id: 'path_empire', title: 'The Iron Throne',
       art: '👑', bg: 'imperial-throne',
-      text: 'Grand Prefect Marius receives you in armor, not robes. "I don\'t trust idealists," he says bluntly. "But I trust people who want something. What do you want?"\n\nThe Empire can destroy the Cult — they have the army. But Marius wants the Aetherstones for himself, to create weapons that would make him the undisputed master of the continent.\n\nYou can shape how this alliance works. What you negotiate now echoes through history.',
+      text: 'Grand Prefect Marius receives you in armor, not robes. "I don\’t trust idealists," he says bluntly. "But I trust people who want something. What do you want?"\n\nThe Empire can destroy the Cult — they have the army. But Marius wants the Aetherstones for himself, to create weapons that would make him the undisputed master of the continent.\n\nYou can shape how this alliance works. What you negotiate now echoes through history.',
       storyFlags: ['empire_ally', 'act2_empire'],
       choices: [
         { text: '"I want a seat at the table." — Negotiate power for yourself', next: 'empire_power_deal' },
@@ -631,7 +630,7 @@ const DATA = {
     final_confrontation: {
       id: 'final_confrontation', title: 'The Last Hour',
       art: '⚡', bg: 'apocalypse-sky',
-      text: 'The six Waystones ignite simultaneously, and the sky tears open. The Primordial Crystal\'s fragments spiral upward toward the rift.\n\nThe Veilbreaker stands at the center of it all — something that was once human, now threaded with void-light. The choice that ends everything stands before you.\n\nAnd three paths remain.',
+      text: 'The six Waystones ignite simultaneously, and the sky tears open. The Primordial Crystal\’s fragments spiral upward toward the rift.\n\nThe Veilbreaker stands at the center of it all — something that was once human, now threaded with void-light. The choice that ends everything stands before you.\n\nAnd three paths remain.',
       choices: [
         { text: '💥 Destroy all the shards — end magic in the world forever', next: 'ending_sacrifice', storyPath: 'sacrifice', req: { flag: 'has_aetherstone' } },
         { text: '✦ Reunite the shards and seal the rift — restore the Crystal', next: 'ending_restoration', type: 'all_stats', req: { flag: 'loremasters_ally' } },
@@ -664,7 +663,7 @@ const DATA = {
     ending_redemption: {
       id: 'ending_redemption', title: 'THE END: The Human Touch',
       art: '💫', bg: 'light-breaking',
-      text: '"I know you\'re still in there," you say, reaching through the void-light toward whatever remains of the person the Veilbreaker once was.\n\nSilence.\n\nThen, impossibly — a hand reaches back.\n\nThe void collapses inward. The shards scatter harmlessly. The rift seals itself. The Veilbreaker stands before you — just a person, hollow-eyed, trembling.\n\n"I don\'t remember how to be this," they whisper.\n\n"Neither did I," you say. "We\'ll figure it out."\n\n🏆 ENDING: The Redemption — The rarest ending. Requires 20 Charisma and a heart that refused to harden.',
+      text: '"I know you\’re still in there," you say, reaching through the void-light toward whatever remains of the person the Veilbreaker once was.\n\nSilence.\n\nThen, impossibly — a hand reaches back.\n\nThe void collapses inward. The shards scatter harmlessly. The rift seals itself. The Veilbreaker stands before you — just a person, hollow-eyed, trembling.\n\n"I don\’t remember how to be this," they whisper.\n\n"Neither did I," you say. "We\’ll figure it out."\n\n🏆 ENDING: The Redemption — The rarest ending. Requires 20 Charisma and a heart that refused to harden.',
       ending: true, endingType: 'perfect'
     }
   },
@@ -678,7 +677,7 @@ const DATA = {
     dark_knight: { id: 'dark_knight', name: 'Void Knight', icon: '⚫', hp: 120, mp: 40, attack: 18, defense: 14, speed: 7, xp: 150, gold: [30,60], abilities: ['Void Strike', 'Shadow Armor', 'Fear Aura'], lore: 'A paladin whose oath shattered and was replaced.' },
     forest_troll: { id: 'forest_troll', name: 'Forest Troll', icon: '🧌', hp: 200, mp: 0, attack: 22, defense: 8, speed: 6, xp: 200, gold: [20,40], abilities: ['Regenerate', 'Boulder Throw', 'Crushing Grip'], lore: 'Ancient and territorial. Can regrow limbs.' },
     shadow_wraith: { id: 'shadow_wraith', name: 'Shadow Wraith', icon: '👻', hp: 80, mp: 80, attack: 15, defense: 0, speed: 16, xp: 180, gold: [15,45], abilities: ['Life Drain', 'Terrify', 'Phase Shift'], lore: 'A soul trapped between worlds, bitter and hungry.' },
-    cultist_mage: { id: 'cultist_mage', name: 'Cult Hexer', icon: '🧙', hp: 55, mp: 120, attack: 6, defense: 3, speed: 9, xp: 120, gold: [20,50], abilities: ['Hex', 'Void Bolt', 'Curse'], lore: 'Gifted the Veilbreaker\'s power in exchange for devotion.' },
+    cultist_mage: { id: 'cultist_mage', name: 'Cult Hexer', icon: '🧙', hp: 55, mp: 120, attack: 6, defense: 3, speed: 9, xp: 120, gold: [20,50], abilities: ['Hex', 'Void Bolt', 'Curse'], lore: 'Gifted the Veilbreaker\’s power in exchange for devotion.' },
     veilbreaker: { id: 'veilbreaker', name: 'The Veilbreaker', icon: '🌑', hp: 800, mp: 500, attack: 40, defense: 20, speed: 15, xp: 5000, gold: [500,1000], abilities: ['Reality Tear', 'Void Cascade', 'Soul Shatter', 'Unmake'], lore: 'An ancient being of chaos given mortal form. The end of all things — or their beginning.', boss: true }
   },
 
