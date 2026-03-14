@@ -3,404 +3,588 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AETHERMOOR — Realms of Fate</title>
+<title>AETHERIS — Realms of Fate</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<style>
+/* ===== BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c;--gold2:#e8c66a;--ink:#0a0806;--deep:#0e0c16;
+  --void:#1a1628;--parchment:#c8b89a;--vellum:#ddd0b8;--cream:#f0e8d8;
+  --crimson:#c0253a;--rose:#e84060;--jade:#1a6b4a;--emerald:#3dba78;
+  --azure:#2458a8;--violet:#7c3dba;--lilac:#a878e0;--arcane:#9040d8;
+  --aether:#60c8f0;--divine:#f8e878;--amber:#e07830;
+  --font-title:'Cinzel Decorative',serif;
+  --font-disp:'Cinzel',serif;
+  --font-body:'Crimson Pro',serif;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var(--font-body);}
+canvas#c{display:block;width:100vw;height:100vh;}
+
+/* ===== SCREENS ===== */
+.screen{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;}
+.hidden{display:none!important;}
+
+/* ===== MAIN MENU ===== */
+#main-menu{background:radial-gradient(ellipse at 50% 40%,#2a1a4a,#0f0d1a 60%,#050408);}
+#particle-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.menu-content{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:32px;}
+.menu-logo h1{font-family:var(--font-title);font-size:clamp(36px,6vw,72px);color:var(--gold);letter-spacing:10px;text-shadow:0 0 60px rgba(201,168,76,.9);}
+.logo-rune{font-size:80px;color:var(--gold);display:block;margin-bottom:16px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 30px var(--gold));}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-8px) rotate(180deg);}}
+.logo-sub{font-family:var(--font-disp);font-size:15px;color:var(--parchment);letter-spacing:6px;text-transform:uppercase;opacity:.8;}
+.main-nav{display:flex;flex-direction:column;gap:12px;width:300px;}
+.menu-btn{font-family:var(--font-disp);font-size:16px;color:var(--vellum);letter-spacing:2px;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.25);padding:14px 32px;border-radius:6px;cursor:pointer;transition:.25s;}
+.menu-btn:hover{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,.08);transform:translateX(4px);box-shadow:-4px 0 0 var(--gold);}
+.menu-btn.primary{color:var(--gold);border-color:var(--gold);}
+
+/* ===== CHARACTER CREATION ===== */
+#char-creation{background:radial-gradient(ellipse at 30% 50%,rgba(90,45,138,.2),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(26,107,74,.15),transparent 60%),var(--ink);overflow-y:auto;align-items:flex-start;padding:20px 0;}
+.creation-container{width:min(900px,95vw);background:rgba(20,18,28,.97);border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:36px;box-shadow:0 8px 40px rgba(0,0,0,.8);margin:0 auto;}
+.creation-header{text-align:center;margin-bottom:28px;}
+.creation-header h2{font-family:var(--font-title);font-size:28px;color:var(--gold);margin-bottom:6px;}
+.creation-header p{font-family:var(--font-disp);color:#7a7590;font-size:13px;letter-spacing:2px;}
+.creation-steps{display:flex;gap:4px;margin-bottom:28px;justify-content:center;flex-wrap:wrap;}
+.step{display:flex;align-items:center;gap:6px;padding:6px 12px;font-family:var(--font-disp);font-size:11px;color:#4a4560;border-radius:20px;transition:.25s;}
+.step span{width:20px;height:20px;background:#221f32;border:1px solid #4a4560;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.step.active{color:var(--gold);}
+.step.active span{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.step.done span{background:var(--jade);color:#fff;border-color:var(--jade);}
+.creation-step h3{font-family:var(--font-disp);font-size:20px;color:var(--gold);margin-bottom:6px;}
+.step-desc{color:#7a7590;font-size:14px;font-style:italic;margin-bottom:20px;}
+
+/* race/class grids */
+.race-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px;}
+.class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:16px;}
+.origin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.race-card,.class-card,.origin-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:14px;cursor:pointer;transition:.2s;text-align:center;}
+.race-card:hover,.class-card:hover,.origin-card:hover{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.05);transform:translateY(-2px);}
+.race-card.selected,.class-card.selected,.origin-card.selected{border-color:var(--gold);background:rgba(201,168,76,.1);box-shadow:0 0 16px rgba(201,168,76,.2);}
+.race-icon,.class-icon{font-size:30px;margin-bottom:6px;display:block;}
+.race-name,.class-name{font-family:var(--font-disp);font-size:12px;color:var(--vellum);}
+.race-tagline,.class-role{font-size:10px;color:#7a7590;font-style:italic;}
+.origin-title{font-family:var(--font-disp);font-size:13px;color:var(--gold);margin-bottom:4px;}
+.origin-desc{font-size:12px;color:var(--parchment);font-style:italic;margin-bottom:8px;}
+.origin-bonus{font-size:11px;color:var(--emerald);}
+.detail-box{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.25);border-radius:6px;padding:16px;min-height:80px;}
+
+/* attributes */
+.attributes-panel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.attr-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:10px 14px;}
+.attr-name{font-family:var(--font-disp);font-size:11px;color:var(--vellum);width:85px;letter-spacing:1px;}
+.attr-icon{font-size:16px;width:22px;text-align:center;}
+.attr-controls{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.attr-btn{width:24px;height:24px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:4px;color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.attr-btn:hover{background:rgba(201,168,76,.25);}
+.attr-btn:disabled{opacity:.3;cursor:not-allowed;}
+.attr-value{font-family:var(--font-disp);font-size:16px;color:var(--gold);width:28px;text-align:center;}
+.attr-preview{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.derived-stat{text-align:center;}
+.derived-stat-val{font-family:var(--font-disp);font-size:18px;color:var(--gold);display:block;}
+.derived-stat-name{font-size:10px;color:#7a7590;}
+.highlight{color:var(--gold);font-family:var(--font-disp);}
+
+/* appearance */
+.appearance-panel{display:flex;gap:20px;margin-bottom:20px;}
+.character-portrait{width:180px;min-height:250px;background:radial-gradient(ellipse at center,rgba(90,45,138,.3),rgba(0,0,0,.8));border:1px solid rgba(201,168,76,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
+.portrait-figure{font-size:100px;z-index:2;position:relative;filter:drop-shadow(0 0 20px rgba(201,168,76,.4));}
+.appearance-options{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.appear-group label{display:block;font-family:var(--font-disp);font-size:11px;color:#7a7590;letter-spacing:1px;margin-bottom:4px;}
+.appear-options{display:flex;flex-wrap:wrap;gap:4px;}
+.appear-opt{padding:4px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:4px;font-size:11px;color:var(--parchment);cursor:pointer;transition:.2s;}
+.appear-opt:hover{border-color:var(--gold);}
+.appear-opt.selected{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold);}
+.name-input-wrap{display:flex;align-items:center;gap:10px;}
+.name-input-wrap label{font-family:var(--font-disp);font-size:12px;color:#7a7590;white-space:nowrap;}
+.name-input{flex:1;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.3);border-radius:6px;color:var(--cream);font-family:var(--font-disp);font-size:15px;outline:none;}
+.name-input:focus{border-color:var(--gold);}
+
+/* destiny */
+.destiny-summary{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.5);border-radius:10px;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.destiny-section h4{font-family:var(--font-disp);font-size:11px;color:#7a7590;letter-spacing:2px;margin-bottom:8px;}
+.stat-item{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;}
+.stat-val{color:var(--gold);font-family:var(--font-disp);}
+.destiny-prophecy{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:16px;text-align:center;}
+.destiny-prophecy p{font-style:italic;font-size:15px;color:var(--parchment);line-height:1.8;}
+
+/* creation nav + buttons */
+.creation-nav{display:flex;justify-content:space-between;margin-top:20px;}
+.btn{font-family:var(--font-disp);font-size:13px;letter-spacing:2px;padding:11px 26px;border-radius:6px;cursor:pointer;transition:.25s;text-transform:uppercase;border:none;}
+.btn.primary{background:linear-gradient(135deg,#8a6828,var(--gold));color:var(--ink);}
+.btn.primary:hover{background:linear-gradient(135deg,var(--gold),var(--gold2));transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.5);}
+.btn.secondary{background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--parchment);}
+.btn.secondary:hover{border-color:var(--gold);color:var(--gold);}
+.btn:disabled{opacity:.3;cursor:not-allowed;}
+.btn-small{font-family:var(--font-disp);font-size:11px;padding:7px 12px;border-radius:4px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);color:var(--gold);cursor:pointer;transition:.2s;}
+.btn-small:hover{background:rgba(201,168,76,.2);}
+
+/* ===== GAME SCREEN ===== */
+#game-screen{display:block;position:fixed;inset:0;z-index:10;}
+
+/* ===== IN-GAME HUD ===== */
+#hud{position:fixed;inset:0;pointer-events:none;z-index:20;}
+
+/* crosshair */
+#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(255,255,255,.85);}
+#crosshair::before{width:2px;height:100%;left:50%;transform:translateX(-50%);}
+#crosshair::after{width:100%;height:2px;top:50%;transform:translateY(-50%);}
+
+/* bars */
+#bars{position:absolute;bottom:90px;left:28px;display:flex;flex-direction:column;gap:6px;}
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar-label{color:#fff;font-family:var(--font-disp);font-size:11px;font-weight:700;width:28px;text-shadow:0 1px 4px #000;letter-spacing:1px;}
+.bar-bg{width:200px;height:13px;background:rgba(0,0,0,.6);border-radius:7px;border:1px solid rgba(255,255,255,.12);overflow:hidden;}
+.bar-fill{height:100%;border-radius:7px;transition:width .2s;}
+#hp-fill{background:linear-gradient(90deg,#8b1a2e,#e84060);}
+#mp-fill{background:linear-gradient(90deg,#1a2a6b,#4090ff);}
+#xp-fill{background:linear-gradient(90deg,#5a2090,#a040ff);}
+.bar-num{color:#fff;font-size:11px;font-family:var(--font-disp);min-width:55px;text-shadow:0 1px 3px #000;}
+
+/* spell bar */
+#spellbar{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:7px;}
+.spell-slot{width:62px;height:62px;border-radius:9px;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:.15s;}
+.spell-slot.ready{border-color:rgba(201,168,76,.7);}
+.spell-slot.active{border-color:#fff;box-shadow:0 0 16px rgba(255,255,255,.6);}
+.spell-slot.cooldown{border-color:rgba(100,100,100,.4);}
+.spell-icon{font-size:24px;line-height:1;}
+.spell-key{font-size:9px;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:1px;}
+.spell-name{font-size:8px;color:rgba(255,255,255,.45);}
+.cd-overlay{position:absolute;inset:0;border-radius:8px;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;}
+
+/* minimap */
+#minimap{position:absolute;top:18px;right:18px;width:140px;height:140px;border-radius:50%;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.6);overflow:hidden;}
+#minimap canvas{width:100%;height:100%;}
+
+/* player list */
+#playerlist{position:absolute;top:18px;left:18px;background:rgba(0,0,0,.65);border-radius:8px;padding:8px 12px;border:1px solid rgba(255,255,255,.1);min-width:150px;}
+#playerlist h4{color:rgba(255,255,255,.45);font-size:10px;letter-spacing:2px;margin-bottom:5px;font-family:var(--font-disp);}
+.player-entry{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.player-dot{width:7px;height:7px;border-radius:50%;background:#4f4;}
+.player-dot.other{background:#ff8844;}
+.player-name{color:#fff;font-size:11px;font-family:var(--font-disp);}
+
+/* kill feed */
+#killfeed{position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;}
+.kf-entry{background:rgba(0,0,0,.75);border-radius:5px;padding:3px 12px;font-size:12px;color:#fff;animation:kf-in .3s ease,kf-out .4s 2.6s ease forwards;}
+@keyframes kf-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes kf-out{to{opacity:0;transform:translateY(-8px)}}
+
+/* damage numbers */
+.dmg-num{position:fixed;font-size:22px;font-weight:900;pointer-events:none;color:#ff4040;text-shadow:0 2px 6px #000;animation:dmg-float 1.2s ease forwards;z-index:100;}
+.dmg-num.heal{color:#40ff80;}
+.dmg-num.crit{color:#ffd700;font-size:28px;}
+.dmg-num.mana{color:#4080ff;}
+@keyframes dmg-float{0%{opacity:1;transform:translateY(0) scale(1);}60%{opacity:1;transform:translateY(-40px) scale(1.1);}100%{opacity:0;transform:translateY(-70px) scale(.8);}}
+
+/* ability flash */
+#ability-flash{position:absolute;bottom:115px;left:50%;transform:translateX(-50%);font-size:16px;font-weight:700;color:#fff;text-shadow:0 0 20px currentColor;opacity:0;transition:opacity .15s;pointer-events:none;text-align:center;letter-spacing:2px;font-family:var(--font-disp);}
+
+/* zone name */
+#zone-name{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-title);font-size:32px;font-weight:900;color:#fff;letter-spacing:6px;text-shadow:0 0 40px rgba(255,255,255,.5);opacity:0;pointer-events:none;transition:opacity 1s;}
+
+/* level display */
+#level-display{position:absolute;bottom:90px;right:18px;background:rgba(0,0,0,.65);border-radius:8px;padding:8px 14px;border:1px solid rgba(255,255,255,.1);text-align:center;}
+#level-display .lv-num{font-size:26px;font-weight:900;color:var(--gold);font-family:var(--font-disp);}
+#level-display .lv-label{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:2px;font-family:var(--font-disp);}
+
+/* chat */
+#chat{position:absolute;bottom:100px;left:28px;width:240px;pointer-events:none;}
+.chat-msg{font-size:12px;color:#fff;text-shadow:0 1px 3px #000;margin-bottom:2px;opacity:.9;}
+#chat-input-wrap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:none;pointer-events:all;}
+#chat-input{width:280px;padding:8px 14px;border-radius:8px;background:rgba(0,0,0,.85);border:1px solid rgba(201,168,76,.4);color:#fff;font-size:13px;outline:none;font-family:var(--font-disp);}
+
+/* controls hint */
+#controls{position:absolute;bottom:18px;right:18px;background:rgba(0,0,0,.5);border-radius:7px;padding:7px 10px;font-size:10px;color:rgba(255,255,255,.45);line-height:1.9;font-family:var(--font-disp);letter-spacing:1px;}
+
+/* buff bar */
+#buff-bar{position:absolute;top:170px;right:18px;display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
+.buff-chip{padding:3px 8px;border-radius:12px;font-size:10px;font-family:var(--font-disp);background:rgba(61,186,120,.15);border:1px solid rgba(61,186,120,.4);color:var(--emerald);}
+.debuff-chip{padding:3px 8px;border-radius:12px;font-size:10px;font-family:var(--font-disp);background:rgba(200,37,58,.15);border:1px solid rgba(200,37,58,.4);color:var(--rose);}
+
+/* ===== PANELS ===== */
+.panel{position:fixed;top:55px;right:14px;width:min(780px,88vw);max-height:calc(100vh - 70px);background:rgba(14,12,20,.98);border:1px solid rgba(201,168,76,.3);border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,.9);display:flex;flex-direction:column;z-index:30;overflow:hidden;animation:panel-in .2s ease;}
+@keyframes panel-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.panel-header{display:flex;align-items:center;gap:10px;padding:12px 18px;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(201,168,76,.2);flex-shrink:0;}
+.panel-header h3{font-family:var(--font-disp);font-size:15px;color:var(--gold);letter-spacing:2px;flex-shrink:0;}
+.panel-tabs{display:flex;gap:3px;flex:1;}
+.ptab{padding:5px 10px;border-radius:4px;font-family:var(--font-disp);font-size:10px;letter-spacing:1px;color:#7a7590;background:transparent;border:none;cursor:pointer;transition:.2s;text-transform:uppercase;}
+.ptab:hover{color:var(--vellum);}
+.ptab.active{background:rgba(201,168,76,.15);color:var(--gold);}
+.close-panel{margin-left:auto;width:26px;height:26px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:4px;color:#7a7590;cursor:pointer;transition:.2s;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;pointer-events:all;}
+.close-panel:hover{background:rgba(200,37,58,.2);border-color:var(--rose);color:var(--rose);}
+.panel-body{flex:1;overflow-y:auto;padding:18px;display:flex;gap:14px;}
+.panel-body::-webkit-scrollbar{width:4px;}
+.panel-body::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px;}
+.panel-footer{padding:8px 18px;border-top:1px solid rgba(201,168,76,.15);display:flex;justify-content:space-between;font-family:var(--font-disp);font-size:11px;color:#7a7590;flex-shrink:0;}
+
+/* inventory */
+.inventory-grid{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:7px;align-content:start;}
+.inv-slot{aspect-ratio:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:.2s;font-size:26px;gap:2px;padding:4px;}
+.inv-slot:hover{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.inv-slot.equipped{border-color:var(--jade);background:rgba(26,107,74,.1);}
+.inv-slot-name{font-family:var(--font-disp);font-size:8px;color:#7a7590;text-align:center;line-height:1.1;}
+.item-detail{width:220px;flex-shrink:0;}
+.item-detail-card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.25);border-radius:6px;padding:14px;}
+.item-name{font-family:var(--font-disp);font-size:15px;color:var(--gold);margin-bottom:4px;}
+.item-type{font-size:11px;color:#7a7590;margin-bottom:10px;letter-spacing:1px;font-family:var(--font-disp);}
+.item-desc{font-size:13px;color:var(--parchment);font-style:italic;margin-bottom:10px;line-height:1.6;}
+.item-stat{display:flex;justify-content:space-between;font-size:12px;color:var(--vellum);}
+.item-stat span{color:var(--gold);font-family:var(--font-disp);}
+.item-actions{display:flex;gap:6px;margin-top:10px;}
+.rarity-common{color:#7a7590;}
+.rarity-uncommon{color:var(--emerald);}
+.rarity-rare{color:var(--azure);}
+.rarity-epic{color:var(--violet);}
+.rarity-legendary{color:var(--gold);}
+
+/* skill tree */
+.skilltree-body{flex-direction:column;}
+.skill-points-display{font-family:var(--font-disp);font-size:12px;color:#7a7590;padding:0 0 10px;flex-shrink:0;letter-spacing:1px;}
+.skill-tree-container{flex:1;overflow:auto;position:relative;background:radial-gradient(ellipse at center,rgba(90,45,138,.08),transparent);min-height:400px;}
+.skill-node{position:absolute;width:66px;height:66px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.2s;text-align:center;padding:3px;z-index:2;}
+.skill-node:hover{transform:scale(1.1);z-index:10;}
+.skill-node.unlocked{border-color:var(--gold);background:rgba(201,168,76,.12);box-shadow:0 0 14px rgba(201,168,76,.3);}
+.skill-node.available{border-color:rgba(201,168,76,.5);animation:skill-pulse 2s ease-in-out infinite;}
+.skill-node.locked{opacity:.4;cursor:not-allowed;}
+.skill-node.mastered{border-color:var(--divine);background:rgba(248,232,120,.15);box-shadow:0 0 18px rgba(248,232,120,.4);}
+@keyframes skill-pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.2);}50%{box-shadow:0 0 0 7px rgba(201,168,76,0);}}
+.skill-icon2{font-size:20px;line-height:1;}
+.skill-node-name{font-family:var(--font-disp);font-size:7px;color:#7a7590;line-height:1.1;margin-top:2px;}
+.skill-node.unlocked .skill-node-name{color:var(--gold);}
+.skill-detail{width:240px;flex-shrink:0;padding:0 0 0 14px;}
+.skill-detail-card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.25);border-radius:6px;padding:14px;}
+.skill-title{font-family:var(--font-disp);font-size:16px;color:var(--gold);margin-bottom:6px;}
+.skill-desc-text{font-size:13px;color:var(--parchment);font-style:italic;margin-bottom:10px;line-height:1.6;}
+.skill-effect{display:flex;gap:6px;font-size:11px;color:var(--vellum);padding:2px 0;}
+.skill-effect span{color:var(--emerald);}
+.skill-cost-text{font-family:var(--font-disp);font-size:11px;color:#7a7590;margin-top:7px;}
+
+/* journal */
+.journal-list{width:200px;flex-shrink:0;display:flex;flex-direction:column;gap:5px;overflow-y:auto;}
+.journal-entry{padding:9px 11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;cursor:pointer;transition:.2s;}
+.journal-entry:hover{border-color:rgba(201,168,76,.3);}
+.journal-entry.active-e{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.journal-entry-title{font-family:var(--font-disp);font-size:12px;color:var(--vellum);margin-bottom:2px;}
+.journal-entry-status{font-size:10px;color:#7a7590;}
+.journal-entry-status.complete{color:var(--emerald);}
+.journal-detail{flex:1;}
+.journal-detail-card{padding:14px;}
+.journal-detail-card h4{font-family:var(--font-disp);font-size:16px;color:var(--gold);margin-bottom:10px;}
+.journal-detail-card p{font-size:14px;color:var(--parchment);line-height:1.8;font-style:italic;margin-bottom:10px;}
+.journal-obj{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--vellum);margin-bottom:5px;}
+.obj-done{color:var(--emerald);}
+.obj-pending{color:#4a4560;}
+
+/* map */
+.map-body{flex-direction:column;padding:0;}
+#map-canvas{width:100%;cursor:crosshair;}
+.map-legend{padding:10px 18px;display:flex;gap:16px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-family:var(--font-disp);font-size:10px;color:#7a7590;}
+.legend-dot{width:9px;height:9px;border-radius:50%;}
+.map-location-info{padding:10px 18px;border-top:1px solid rgba(201,168,76,.15);min-height:55px;}
+
+/* character sheet */
+.char-panel-body{flex-direction:row;}
+.char-left{width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;}
+.char-right{flex:1;display:flex;flex-direction:column;gap:10px;}
+.char-portrait-large{width:100%;aspect-ratio:3/4;background:radial-gradient(ellipse at center,rgba(90,45,138,.4),rgba(0,0,0,.9));border:1px solid rgba(201,168,76,.5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:70px;}
+.char-section-title{font-family:var(--font-disp);font-size:10px;color:#7a7590;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.05);padding-bottom:5px;}
+.char-stat-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.char-stat-name{font-family:var(--font-disp);font-size:11px;color:#7a7590;}
+.char-stat-value{font-family:var(--font-disp);font-size:13px;color:var(--gold);}
+.equip-slot{display:flex;align-items:center;gap:8px;padding:7px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;margin-bottom:5px;}
+.equip-slot-icon{font-size:18px;width:24px;text-align:center;}
+.equip-slot-name{font-family:var(--font-disp);font-size:11px;color:var(--vellum);}
+.equip-slot-type{font-size:10px;color:#4a4560;}
+.trait-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;background:rgba(90,45,138,.15);border:1px solid rgba(90,45,138,.4);border-radius:12px;font-size:11px;color:var(--lilac);margin:2px;}
+.rep-bar-wrap{margin-bottom:6px;}
+.rep-faction{font-family:var(--font-disp);font-size:11px;color:var(--vellum);margin-bottom:3px;display:flex;justify-content:space-between;}
+.rep-bar{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;}
+.rep-fill{height:100%;border-radius:3px;transition:width .4s;}
+.rep-hostile .rep-fill{background:var(--crimson);}
+.rep-friendly .rep-fill{background:var(--jade);}
+.rep-neutral .rep-fill{background:#7a7590;}
+.rep-exalted .rep-fill{background:var(--gold);}
+
+/* ===== LEVEL UP MODAL ===== */
+#levelup-modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;}
+.levelup-content{background:rgba(20,18,28,.99);border:2px solid var(--gold);border-radius:12px;padding:36px;text-align:center;box-shadow:0 0 60px rgba(201,168,76,.4);animation:lvl-boom .4s cubic-bezier(.4,0,.2,1);}
+@keyframes lvl-boom{0%{transform:scale(.5);opacity:0;}70%{transform:scale(1.05);}100%{transform:scale(1);opacity:1;}}
+.levelup-title{font-family:var(--font-title);font-size:40px;color:var(--gold);text-shadow:0 0 40px rgba(248,232,120,.8);margin-bottom:6px;}
+.levelup-level{font-family:var(--font-disp);font-size:16px;color:var(--vellum);margin-bottom:20px;letter-spacing:2px;}
+.levelup-bonuses{display:flex;flex-direction:column;gap:5px;margin-bottom:20px;min-width:280px;}
+.levelup-bonus-row{display:flex;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:4px;font-family:var(--font-disp);font-size:12px;}
+.bonus-name{color:#7a7590;}
+.bonus-value{color:var(--emerald);}
+
+/* ===== NOTIFICATIONS ===== */
+#notifications{position:fixed;top:70px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;z-index:300;pointer-events:none;width:360px;}
+.notification{background:rgba(20,18,28,.98);border:1px solid rgba(201,168,76,.3);border-radius:6px;padding:10px 14px;font-family:var(--font-disp);font-size:12px;color:var(--vellum);animation:notif-in .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.8);letter-spacing:1px;}
+.notification.xp{border-color:var(--violet);color:var(--lilac);}
+.notification.item{border-color:var(--gold);color:var(--gold);}
+.notification.success{border-color:var(--emerald);color:var(--emerald);}
+.notification.warning{border-color:var(--amber);color:var(--amber);}
+.notification.level{border-color:var(--divine);color:var(--divine);background:rgba(248,232,120,.08);}
+@keyframes notif-in{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+
+/* lock message */
+#lock-msg{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;background:rgba(0,0,0,.88);z-index:100;}
+#lock-msg h1{font-family:var(--font-title);color:var(--gold);font-size:44px;letter-spacing:6px;text-shadow:0 0 40px var(--gold);}
+#lock-msg p{color:rgba(255,255,255,.65);font-family:var(--font-disp);font-size:14px;letter-spacing:2px;}
+#lock-msg .play-btn{padding:13px 38px;font-size:16px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:8px;cursor:pointer;color:var(--ink);font-family:var(--font-disp);box-shadow:0 0 30px rgba(255,200,0,.4);transition:.2s;}
+#lock-msg .play-btn:hover{transform:scale(1.04);box-shadow:0 0 50px rgba(255,200,0,.7);}
+
+/* HUD panel buttons */
+#hud-btns{position:absolute;top:18px;left:180px;display:flex;gap:5px;pointer-events:all;}
+.hud-btn{width:32px;height:32px;background:rgba(0,0,0,.7);border:1px solid rgba(201,168,76,.3);border-radius:6px;color:var(--parchment);font-size:14px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;}
+.hud-btn:hover{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold);}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px;}
+</style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
-<div id="loading-screen">
-  <div class="loading-content">
-    <div class="loading-rune">⬡</div>
-    <h1 class="loading-title">AETHERMOOR</h1>
-    <p class="loading-sub">Realms of Fate</p>
-    <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-    <p class="loading-status" id="loading-status">Weaving the fates...</p>
-  </div>
-</div>
-
 <!-- MAIN MENU -->
-<div id="main-menu" class="screen hidden">
-  <div class="menu-bg">
-    <canvas id="particle-canvas"></canvas>
-    <div class="menu-overlay"></div>
-  </div>
+<div id="main-menu" class="screen">
+  <canvas id="particle-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
   <div class="menu-content">
     <div class="menu-logo">
-      <div class="logo-rune">⬡</div>
-      <h1>AETHERMOOR</h1>
-      <p class="logo-sub">Realms of Fate</p>
+      <span class="logo-rune">⬡</span>
+      <h1>AETHERIS</h1>
+      <p class="logo-sub">Realms of Fate — Open World</p>
     </div>
     <nav class="main-nav">
-      <button class="menu-btn primary" onclick="Game.startNewGame()">⚔ New Adventure</button>
-      <button class="menu-btn" onclick="Game.loadGame()">📜 Continue Journey</button>
-      <button class="menu-btn" onclick="UI.showScreen('lore-screen')">🌍 The World</button>
-      <button class="menu-btn" onclick="UI.showScreen('credits-screen')">✦ Credits</button>
+      <button class="menu-btn primary" onclick="GameFlow.newGame()">⚔ Enter the World</button>
+      <button class="menu-btn" onclick="GameFlow.loadGame()">📜 Continue</button>
+      <button class="menu-btn" onclick="GameFlow.showLore()">🌍 Lore</button>
     </nav>
-    <div class="menu-footer">
-      <span>v1.0 — A living world of infinite stories</span>
-    </div>
+    <div style="font-family:var(--font-disp);font-size:10px;color:#4a4560;letter-spacing:2px;">WASD · Mouse · Q E R Z F X — Spells · T — Chat</div>
   </div>
 </div>
 
 <!-- CHARACTER CREATION -->
 <div id="char-creation" class="screen hidden">
-  <div class="creation-bg"></div>
   <div class="creation-container">
     <div class="creation-header">
       <h2>Forge Your Legend</h2>
       <p>Every choice echoes through eternity</p>
     </div>
-
-    <!-- Step indicators -->
     <div class="creation-steps">
-      <div class="step active" data-step="1"><span>1</span>Race</div>
-      <div class="step" data-step="2"><span>2</span>Class</div>
-      <div class="step" data-step="3"><span>3</span>Origin</div>
-      <div class="step" data-step="4"><span>4</span>Attributes</div>
-      <div class="step" data-step="5"><span>5</span>Appearance</div>
-      <div class="step" data-step="6"><span>6</span>Destiny</div>
+      <div class="step active" data-step="1"><span>1</span> Race</div>
+      <div class="step" data-step="2"><span>2</span> Class</div>
+      <div class="step" data-step="3"><span>3</span> Origin</div>
+      <div class="step" data-step="4"><span>4</span> Stats</div>
+      <div class="step" data-step="5"><span>5</span> Look</div>
+      <div class="step" data-step="6"><span>6</span> Destiny</div>
     </div>
-
-    <!-- Step 1: Race -->
     <div class="creation-step" id="step-race">
       <h3>Choose Your Race</h3>
       <p class="step-desc">Your blood shapes your destiny before your first breath.</p>
       <div class="race-grid" id="race-grid"></div>
-      <div class="race-detail" id="race-detail"></div>
+      <div class="detail-box" id="race-detail"><span style="color:#4a4560;font-style:italic;font-size:13px">Select a race to learn more</span></div>
     </div>
-
-    <!-- Step 2: Class -->
     <div class="creation-step hidden" id="step-class">
       <h3>Choose Your Path</h3>
-      <p class="step-desc">The road you walk will define the legend you leave behind.</p>
+      <p class="step-desc">The road you walk defines the legend you leave behind.</p>
       <div class="class-grid" id="class-grid"></div>
-      <div class="class-detail" id="class-detail"></div>
+      <div class="detail-box" id="class-detail"><span style="color:#4a4560;font-style:italic;font-size:13px">Select a class to learn more</span></div>
     </div>
-
-    <!-- Step 3: Origin -->
     <div class="creation-step hidden" id="step-origin">
-      <h3>Your Origin Story</h3>
+      <h3>Your Origin</h3>
       <p class="step-desc">Where you came from shapes where you can go.</p>
       <div class="origin-grid" id="origin-grid"></div>
     </div>
-
-    <!-- Step 4: Attributes -->
     <div class="creation-step hidden" id="step-attributes">
       <h3>Shape Your Soul</h3>
-      <p class="step-desc">Distribute <span id="points-remaining" class="highlight">27</span> points among your core attributes.</p>
+      <p class="step-desc">Distribute <span id="pts-remaining" class="highlight">27</span> points among your attributes.</p>
       <div class="attributes-panel" id="attributes-panel"></div>
       <div class="attr-preview" id="attr-preview"></div>
     </div>
-
-    <!-- Step 5: Appearance -->
     <div class="creation-step hidden" id="step-appearance">
       <h3>Your Visage</h3>
-      <p class="step-desc">The face the world will remember — or fear.</p>
+      <p class="step-desc">The face the world will remember.</p>
       <div class="appearance-panel">
-        <div class="character-portrait" id="char-portrait">
-          <div class="portrait-figure" id="portrait-figure"></div>
-          <div class="portrait-aura" id="portrait-aura"></div>
-        </div>
+        <div class="character-portrait"><div class="portrait-figure" id="portrait-figure">🧙</div></div>
         <div class="appearance-options" id="appearance-options"></div>
       </div>
       <div class="name-input-wrap">
-        <label>Your Name</label>
-        <input type="text" id="char-name" placeholder="Enter your name..." maxlength="24" class="name-input">
-        <button class="btn-small" onclick="CharCreation.randomName()">⚄ Random</button>
+        <label>Name</label>
+        <input type="text" id="char-name" class="name-input" placeholder="Your name..." maxlength="24">
+        <button class="btn-small" onclick="Creation.randomName()">⚄ Random</button>
       </div>
     </div>
-
-    <!-- Step 6: Destiny -->
     <div class="creation-step hidden" id="step-destiny">
       <h3>Your Fate is Written</h3>
-      <p class="step-desc">The stars have spoken. Your path begins now.</p>
+      <p class="step-desc">The stars have spoken.</p>
       <div class="destiny-summary" id="destiny-summary"></div>
       <div class="destiny-prophecy" id="destiny-prophecy"></div>
     </div>
-
-    <!-- Navigation -->
     <div class="creation-nav">
-      <button class="btn secondary" id="btn-back" onclick="CharCreation.prevStep()" disabled>← Back</button>
-      <button class="btn primary" id="btn-next" onclick="CharCreation.nextStep()">Next →</button>
+      <button class="btn secondary" id="btn-back" onclick="Creation.prev()" disabled>← Back</button>
+      <button class="btn primary" id="btn-next" onclick="Creation.next()">Next →</button>
     </div>
   </div>
 </div>
 
-<!-- MAIN GAME -->
-<div id="game-screen" class="screen hidden">
-  <!-- Top HUD -->
-  <div id="top-hud">
-    <div class="hud-left">
-      <div class="portrait-mini" id="hud-portrait"></div>
-      <div class="hud-vitals">
-        <div class="vital-row">
-          <span class="vital-label">HP</span>
-          <div class="vital-bar hp-bar"><div class="vital-fill" id="hp-fill"></div></div>
-          <span class="vital-num" id="hp-num">100/100</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-label">MP</span>
-          <div class="vital-bar mp-bar"><div class="vital-fill" id="mp-fill"></div></div>
-          <span class="vital-num" id="mp-num">50/50</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-label">XP</span>
-          <div class="vital-bar xp-bar"><div class="vital-fill" id="xp-fill"></div></div>
-          <span class="vital-num" id="xp-num">0/100</span>
-        </div>
+<!-- GAME -->
+<div id="game-screen" class="hidden">
+  <canvas id="c"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="crosshair"></div>
+    <div id="bars">
+      <div class="bar-wrap">
+        <span class="bar-label">HP</span>
+        <div class="bar-bg"><div class="bar-fill" id="hp-fill" style="width:100%"></div></div>
+        <span class="bar-num" id="hp-num">100/100</span>
+      </div>
+      <div class="bar-wrap">
+        <span class="bar-label">MP</span>
+        <div class="bar-bg"><div class="bar-fill" id="mp-fill" style="width:100%"></div></div>
+        <span class="bar-num" id="mp-num">100/100</span>
+      </div>
+      <div class="bar-wrap">
+        <span class="bar-label">XP</span>
+        <div class="bar-bg"><div class="bar-fill" id="xp-fill" style="width:0%"></div></div>
+        <span class="bar-num" id="xp-num">0/100</span>
       </div>
     </div>
-    <div class="hud-center">
-      <div class="location-display">
-        <span class="location-icon">◈</span>
-        <span id="location-name">The Verdant Crossroads</span>
-      </div>
-      <div class="story-arc-display">
-        <span id="story-arc">Chapter I: A World on the Brink</span>
-      </div>
+    <div id="spellbar">
+      <div class="spell-slot ready" id="spell-q"><span class="spell-icon">🔥</span><span class="spell-key">Q</span><span class="spell-name">Fireball</span></div>
+      <div class="spell-slot ready" id="spell-e"><span class="spell-icon">⚡</span><span class="spell-key">E</span><span class="spell-name">Lightning</span></div>
+      <div class="spell-slot ready" id="spell-r"><span class="spell-icon">💚</span><span class="spell-key">R</span><span class="spell-name">Heal</span></div>
+      <div class="spell-slot ready" id="spell-z"><span class="spell-icon">🌑</span><span class="spell-key">Z</span><span class="spell-name">Void Blast</span></div>
+      <div class="spell-slot ready" id="spell-f"><span class="spell-icon">🌀</span><span class="spell-key">F</span><span class="spell-name">Blink</span></div>
+      <div class="spell-slot ready" id="spell-x"><span class="spell-icon">🛡</span><span class="spell-key">X</span><span class="spell-name">Shield</span></div>
     </div>
-    <div class="hud-right">
-      <div class="hud-stats">
-        <span class="hud-stat">⚔ <span id="hud-atk">12</span></span>
-        <span class="hud-stat">🛡 <span id="hud-def">8</span></span>
-        <span class="hud-stat">✦ Lv.<span id="hud-level">1</span></span>
-        <span class="hud-stat">◈ <span id="hud-gold">50</span>g</span>
+    <div id="minimap"><canvas id="mm" width="140" height="140"></canvas></div>
+    <div id="playerlist"><h4>ONLINE</h4><div id="player-entries"></div></div>
+    <div id="killfeed"></div>
+    <div id="ability-flash"></div>
+    <div id="zone-name"></div>
+    <div id="level-display"><div class="lv-num" id="lv-num">1</div><div class="lv-label">LEVEL</div></div>
+    <div id="chat"></div>
+    <div id="buff-bar"></div>
+    <div id="hud-btns">
+      <button class="hud-btn" onclick="PanelMgr.open('inventory')" title="Inventory [I]">🎒</button>
+      <button class="hud-btn" onclick="PanelMgr.open('skilltree')" title="Skills [K]">⬡</button>
+      <button class="hud-btn" onclick="PanelMgr.open('journal')" title="Journal [J]">📜</button>
+      <button class="hud-btn" onclick="PanelMgr.open('map')" title="Map [M]">🗺</button>
+      <button class="hud-btn" onclick="PanelMgr.open('character')" title="Character [C]">⚔</button>
+    </div>
+    <div id="controls">
+      WASD Move · Mouse Look · Space Jump · Shift Sprint<br>
+      Q E R Z F X — Spells · LMB Attack<br>
+      I K J M C — Panels · T Chat · Esc Close
+    </div>
+  </div>
+
+  <!-- PANELS -->
+  <div id="panel-inventory" class="panel hidden">
+    <div class="panel-header"><h3>🎒 Inventory</h3>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="InvUI.tab('all')">All</button>
+        <button class="ptab" onclick="InvUI.tab('weapon')">Weapons</button>
+        <button class="ptab" onclick="InvUI.tab('armor')">Armor</button>
+        <button class="ptab" onclick="InvUI.tab('consumable')">Consumables</button>
       </div>
-      <div class="hud-buttons">
-        <button class="hud-btn" onclick="UI.openPanel('inventory')" title="Inventory">⚙</button>
-        <button class="hud-btn" onclick="UI.openPanel('skilltree')" title="Skill Tree">⬡</button>
-        <button class="hud-btn" onclick="UI.openPanel('journal')" title="Journal">📜</button>
-        <button class="hud-btn" onclick="UI.openPanel('map')" title="Map">◈</button>
-        <button class="hud-btn" onclick="UI.openPanel('character')" title="Character">⚔</button>
+      <button class="close-panel" onclick="PanelMgr.close('inventory')">✕</button>
+    </div>
+    <div class="panel-body"><div class="inventory-grid" id="inv-grid"></div><div class="item-detail" id="item-detail"><span style="color:#4a4560;font-style:italic;font-size:13px">Select an item</span></div></div>
+    <div class="panel-footer"><span id="carry-weight">Weight: 0/50</span><span id="gold-disp">◈ 0 Gold</span></div>
+  </div>
+
+  <div id="panel-skilltree" class="panel hidden">
+    <div class="panel-header"><h3>⬡ Skill Tree</h3>
+      <div class="panel-tabs" id="skill-tabs"></div>
+      <button class="close-panel" onclick="PanelMgr.close('skilltree')">✕</button>
+    </div>
+    <div class="panel-body skilltree-body">
+      <div class="skill-points-display">Skill Points: <span id="sp-avail" class="highlight">0</span></div>
+      <div id="skill-tree-container" class="skill-tree-container"></div>
+      <div class="skill-detail" id="skill-detail"><span style="color:#4a4560;font-style:italic;font-size:13px">Hover a skill</span></div>
+    </div>
+  </div>
+
+  <div id="panel-journal" class="panel hidden">
+    <div class="panel-header"><h3>📜 Chronicle</h3>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="JournalUI.tab('quests')">Quests</button>
+        <button class="ptab" onclick="JournalUI.tab('choices')">Choices</button>
+        <button class="ptab" onclick="JournalUI.tab('factions')">Factions</button>
+        <button class="ptab" onclick="JournalUI.tab('lore')">Lore</button>
+      </div>
+      <button class="close-panel" onclick="PanelMgr.close('journal')">✕</button>
+    </div>
+    <div class="panel-body"><div class="journal-list" id="journal-list"></div><div class="journal-detail" id="journal-detail"></div></div>
+  </div>
+
+  <div id="panel-map" class="panel hidden">
+    <div class="panel-header"><h3>🗺 World Map</h3><button class="close-panel" onclick="PanelMgr.close('map')">✕</button></div>
+    <div class="panel-body map-body"><canvas id="map-canvas" width="700" height="420"></canvas>
+      <div class="map-legend" id="map-legend"></div>
+      <div class="map-location-info" id="map-loc-info"></div>
+    </div>
+  </div>
+
+  <div id="panel-character" class="panel hidden">
+    <div class="panel-header"><h3>⚔ Character Sheet</h3><button class="close-panel" onclick="PanelMgr.close('character')">✕</button></div>
+    <div class="panel-body char-panel-body">
+      <div class="char-left">
+        <div class="char-portrait-large" id="char-portrait-lg"></div>
+        <div id="char-basic"></div>
+        <div id="char-equip"></div>
+      </div>
+      <div class="char-right">
+        <div id="char-stats"></div>
+        <div id="char-traits-div"></div>
+        <div id="char-rep"></div>
       </div>
     </div>
   </div>
 
-  <!-- Main game area -->
-  <div id="game-main">
-    <!-- Scene panel -->
-    <div id="scene-panel">
-      <div id="scene-bg" class="scene-bg"></div>
-      <div id="scene-overlay"></div>
-      <div id="scene-content">
-        <div id="scene-title" class="scene-title"></div>
-        <div id="scene-art" class="scene-art"></div>
-        <div id="scene-text" class="scene-text"></div>
-        <div id="active-buffs" class="active-buffs"></div>
-      </div>
-    </div>
-
-    <!-- Action panel -->
-    <div id="action-panel">
-      <div class="action-header">
-        <span id="action-context">What will you do?</span>
-      </div>
-      <div id="action-choices" class="action-choices"></div>
-      <div id="dice-area" class="dice-area hidden">
-        <div class="dice-container" id="dice-container"></div>
-        <p id="dice-result" class="dice-result"></p>
-      </div>
-    </div>
+  <!-- Lock Pointer -->
+  <div id="lock-msg">
+    <h1>AETHERIS</h1>
+    <p>Click to lock cursor and begin playing</p>
+    <button class="play-btn" onclick="World.lockPointer()">⚔ ENTER WORLD</button>
   </div>
 
-  <!-- Status Effects Bar -->
-  <div id="status-bar">
-    <div id="status-effects"></div>
-    <div id="active-quests-mini"></div>
+  <div id="chat-input-wrap"><input id="chat-input" placeholder="Press Enter to send..." maxlength="100"></div>
+</div>
+
+<!-- Level Up -->
+<div id="levelup-modal" class="hidden">
+  <div class="levelup-content">
+    <div class="levelup-title">LEVEL UP!</div>
+    <div class="levelup-level" id="lu-level">You are now Level 2</div>
+    <div class="levelup-bonuses" id="lu-bonuses"></div>
+    <button class="btn primary" onclick="document.getElementById('levelup-modal').classList.add('hidden')">Continue ⚔</button>
   </div>
 </div>
 
-<!-- PANELS (overlays) -->
+<div id="notifications"></div>
 
-<!-- Inventory Panel -->
-<div id="panel-inventory" class="panel hidden">
-  <div class="panel-header">
-    <h3>⚙ Inventory</h3>
-    <div class="panel-tabs">
-      <button class="ptab active" onclick="Inventory.showTab('all')">All</button>
-      <button class="ptab" onclick="Inventory.showTab('weapons')">Weapons</button>
-      <button class="ptab" onclick="Inventory.showTab('armor')">Armor</button>
-      <button class="ptab" onclick="Inventory.showTab('consumables')">Consumables</button>
-      <button class="ptab" onclick="Inventory.showTab('quest')">Quest</button>
-    </div>
-    <button class="close-panel" onclick="UI.closePanel('inventory')">✕</button>
-  </div>
-  <div class="panel-body">
-    <div class="inventory-grid" id="inventory-grid"></div>
-    <div class="item-detail" id="item-detail">
-      <p class="item-detail-placeholder">Select an item to inspect</p>
-    </div>
-  </div>
-  <div class="panel-footer">
-    <span id="carry-weight">Weight: 0/50</span>
-    <span id="gold-display">◈ 50 Gold</span>
-  </div>
-</div>
-
-<!-- Skill Tree Panel -->
-<div id="panel-skilltree" class="panel hidden">
-  <div class="panel-header">
-    <h3>⬡ Skill Tree</h3>
-    <div class="panel-tabs" id="skill-tabs"></div>
-    <button class="close-panel" onclick="UI.closePanel('skilltree')">✕</button>
-  </div>
-  <div class="panel-body skilltree-body">
-    <div class="skill-points-display">
-      <span>Available Points: </span><span id="skill-points-avail" class="highlight">0</span>
-    </div>
-    <div id="skill-tree-container" class="skill-tree-container"></div>
-    <div id="skill-detail" class="skill-detail">
-      <p class="skill-detail-placeholder">Hover a skill to inspect</p>
-    </div>
-  </div>
-</div>
-
-<!-- Journal Panel -->
-<div id="panel-journal" class="panel hidden">
-  <div class="panel-header">
-    <h3>📜 Chronicle</h3>
-    <div class="panel-tabs">
-      <button class="ptab active" onclick="Journal.showTab('quests')">Quests</button>
-      <button class="ptab" onclick="Journal.showTab('lore')">Lore</button>
-      <button class="ptab" onclick="Journal.showTab('choices')">Your Choices</button>
-      <button class="ptab" onclick="Journal.showTab('factions')">Factions</button>
-    </div>
-    <button class="close-panel" onclick="UI.closePanel('journal')">✕</button>
-  </div>
-  <div class="panel-body">
-    <div id="journal-list" class="journal-list"></div>
-    <div id="journal-detail" class="journal-detail"></div>
-  </div>
-</div>
-
-<!-- Map Panel -->
-<div id="panel-map" class="panel hidden">
-  <div class="panel-header">
-    <h3>◈ World Map</h3>
-    <button class="close-panel" onclick="UI.closePanel('map')">✕</button>
-  </div>
-  <div class="panel-body map-body">
-    <canvas id="map-canvas" width="800" height="500"></canvas>
-    <div id="map-legend" class="map-legend"></div>
-    <div id="map-location-info" class="map-location-info"></div>
-  </div>
-</div>
-
-<!-- Character Panel -->
-<div id="panel-character" class="panel hidden">
-  <div class="panel-header">
-    <h3>⚔ Character Sheet</h3>
-    <button class="close-panel" onclick="UI.closePanel('character')">✕</button>
-  </div>
-  <div class="panel-body char-panel-body">
-    <div class="char-left">
-      <div class="char-portrait-large" id="char-portrait-large"></div>
-      <div class="char-basic-info" id="char-basic-info"></div>
-      <div class="char-equipment" id="char-equipment"></div>
-    </div>
-    <div class="char-right">
-      <div class="char-stats-full" id="char-stats-full"></div>
-      <div class="char-traits" id="char-traits"></div>
-      <div class="char-buffs-debuffs" id="char-buffs-debuffs"></div>
-      <div class="char-reputation" id="char-reputation"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Combat Overlay -->
-<div id="combat-overlay" class="hidden">
-  <div id="combat-scene">
-    <div id="combat-bg" class="combat-bg"></div>
-    <div id="combatants">
-      <div class="combatant player-side" id="player-combatant">
-        <div class="combatant-art" id="player-combat-art"></div>
-        <div class="combatant-info">
-          <span id="player-combat-name">Hero</span>
-          <div class="combat-bar hp"><div class="combat-fill" id="player-hp-bar"></div></div>
-          <div class="combat-bar mp"><div class="combat-fill" id="player-mp-bar"></div></div>
-        </div>
-        <div class="combatant-effects" id="player-effects"></div>
-      </div>
-      <div class="combat-center">
-        <div class="vs-orb">VS</div>
-        <div id="combat-log" class="combat-log"></div>
-      </div>
-      <div class="combatant enemy-side" id="enemy-combatant">
-        <div class="combatant-art" id="enemy-combat-art"></div>
-        <div class="combatant-info">
-          <span id="enemy-combat-name">Enemy</span>
-          <div class="combat-bar hp"><div class="combat-fill" id="enemy-hp-bar"></div></div>
-          <div class="combat-bar mp"><div class="combat-fill" id="enemy-mp-bar"></div></div>
-        </div>
-        <div class="combatant-effects" id="enemy-effects"></div>
-      </div>
-    </div>
-    <div id="combat-actions" class="combat-actions">
-      <div class="combat-action-tabs">
-        <button class="ctab active" onclick="Combat.showTab('attack')">⚔ Attack</button>
-        <button class="ctab" onclick="Combat.showTab('skills')">⬡ Skills</button>
-        <button class="ctab" onclick="Combat.showTab('items')">⚙ Items</button>
-        <button class="ctab" onclick="Combat.showTab('flee')">💨 Flee</button>
-      </div>
-      <div id="combat-action-content" class="combat-action-content"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Notification System -->
-<div id="notifications" class="notifications"></div>
-
-<!-- Lore Screen -->
-<div id="lore-screen" class="screen hidden">
-  <button class="back-btn" onclick="UI.showScreen('main-menu')">← Back</button>
-  <div class="lore-content">
-    <h2>The World of Aethermoor</h2>
-    <div class="lore-text">
-      <p>In an age before memory, the god-smith Vaelthar shattered the Primordial Crystal, scattering divine essence across the mortal realm. These shards — called <em>Aetherstones</em> — became the foundation of all magic, all conflict, and all destiny.</p>
-      <p>Five great civilizations rose to prominence: the iron-willed <strong>Drakthari Empire</strong>, the mystical <strong>Sylvani Accord</strong>, the subterranean <strong>Stoneheart Compact</strong>, the seafaring <strong>Tidecrown Kingdoms</strong>, and the wandering <strong>Ashborn Confederacy</strong>.</p>
-      <p>Now, a shadow stirs in the east. The <em>Veilbreaker Cult</em> seeks to reunite the shards and unmake creation itself. Alliances fracture. Heroes rise — and fall. The fate of Aethermoor rests not on prophecy, but on choice.</p>
-      <p><em>Your</em> choices.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Credits -->
-<div id="credits-screen" class="screen hidden">
-  <button class="back-btn" onclick="UI.showScreen('main-menu')">← Back</button>
-  <div class="credits-content">
-    <h2>Aethermoor</h2>
-    <p>A handcrafted RPG experience</p>
-    <p>Built with pure HTML, CSS & JavaScript</p>
-    <p>Ready for GitHub → Vercel + Render deployment</p>
-    <p class="credits-small">All systems: Story Engine • Skill Trees • Combat • Inventory • Factions • Buffs • Races • Classes • Dynamic World</p>
-  </div>
-</div>
-
-<!-- Tooltip -->
-<div id="tooltip" class="tooltip hidden"></div>
-
-<!-- Level Up Modal -->
-<div id="levelup-modal" class="modal hidden">
-  <div class="modal-content levelup-content">
-    <div class="levelup-burst" id="levelup-burst"></div>
-    <h2 class="levelup-title">LEVEL UP!</h2>
-    <p id="levelup-level" class="levelup-level">You are now Level 2</p>
-    <div id="levelup-bonuses" class="levelup-bonuses"></div>
-    <button class="btn primary" onclick="UI.closeLevelUp()">Continue ⚔</button>
-  </div>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const BASE = window.location.hostname==='localhost'?'http://localhost:3001':'https://the-land-of-grofix-1.onrender.com';
+  window.SERVER_URL = BASE;
+  const s=document.createElement('script');
+  s.src=BASE+'/socket.io/socket.io.js';
+  s.onerror=()=>console.log('Solo mode');
+  document.head.appendChild(s);
+})();
+</script>
 <script src="js/data.js"></script>
-<script src="js/engine.js"></script>
-<script src="js/combat.js"></script>
+<script src="js/rpg.js"></script>
+<script src="js/world.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/creation.js"></script>
-<script src="js/skills.js"></script>
-<script src="js/story.js"></script>
-<script src="js/map.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
